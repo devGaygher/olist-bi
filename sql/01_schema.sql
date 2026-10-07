@@ -67,7 +67,7 @@ CREATE TABLE order_reviews(
     order_id varchar(32) not null,
     review_score int not null,
     review_comment_title varchar(100),
-    review_comment_messagem text,
+    review_comment_message text,
     review_creation_date datetime,
     review_answer_timestamp datetime
 );
@@ -75,7 +75,7 @@ CREATE TABLE order_reviews(
 DROP TABLE IF EXISTS products;
 CREATE TABLE products(
     product_id varchar(32) not null,
-    product_category_name varchar(20),
+    product_category_name varchar(100),
     product_name_length int,
     product_description_length int,
     product_photos_qty int,
