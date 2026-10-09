@@ -51,12 +51,12 @@
 - 6 `canceled` com data de entrega: já saem pela regra de pedido válido.
 
 ### Bloco 3: duplicatas e junções
-- Fato: `order_reviews` tem 99.224 linhas e 98.410 `review_id` distintos (814 repetidos).
-- Fato: há pedidos com mais de um review (4 com 3 reviews, o resto com 2). A contagem exata ainda não foi rodada.
+- Fato: `order_reviews` tem 99.224 linhas e 98.410 `review_id` distintos (814 linhas a mais que ids distintos).
+- Fato: 547 pedidos têm mais de um review (4 com 3 reviews e 543 com 2). Os `review_id` repetidos aparecem sempre em pedidos diferentes.
 - Fato: 775 pedidos sem item, dos quais 8 em status válido.
 - Fato: 768 pedidos sem review (646 são `delivered`, 0,67% dos entregues).
 - **Decisões:**
-  - 1 review por pedido nas views, com `ROW_NUMBER()` (critério a definir, por exemplo o mais recente).
+  - 1 review por pedido nas views, com `ROW_NUMBER()`, ficando o review mais recente (`review_answer_timestamp` decrescente, com `review_creation_date` decrescente como desempate).
   - Receita e contagem de pedidos saem de `order_items`, não de `orders`.
   - Pedidos sem review ficam fora da média de nota, com ressalva na pergunta 13.
 
@@ -73,19 +73,23 @@
 
 ### Bloco 5: geolocation e valores suspeitos
 - Fato: `geolocation` tem 1.000.163 linhas para 19.015 CEPs (52,6 por CEP).
-- Fato: 157 CEPs de clientes não existem em `geolocation`. Quantos clientes isso afeta ainda não foi medido.
+- Fato: 157 CEPs de clientes não existem em `geolocation`. Isso afeta 278 linhas de `customers` (0,28%), que correspondem a 269 clientes (`customer_unique_id`).
 - Fato: preço mínimo 0,85 e máximo 6.735,00; nenhum frete negativo; 383 itens com frete zero.
+- Fato: os 5 itens mais caros custam 6.735,00, 6.729,00, 6.499,00, 4.799,00 e 4.690,00, com frete entre 74,34 e 227,66. Não há um valor isolado muito acima dos outros. Se são produtos caros de verdade (por exemplo, de uma categoria específica) é hipótese: a categoria não foi conferida.
 - Fato: notas só de 1 a 5, sem nulos.
 - Fato: 1.359 pedidos postados antes da aprovação e 23 entregues antes da postagem. A causa é hipótese.
 - Fato: pagamentos por tipo: credit_card 76.795, boleto 19.784, voucher 5.775, debit_card 1.529, not_defined 3. A tabela tem uma linha por pagamento, não por pedido.
+- Fato: 9 pagamentos com valor zero: 3 `not_defined` (1 parcela) e 6 `voucher`. Os 2 pagamentos de cartão com 0 parcelas têm valor real (58,69 e 129,94, ambos o 2º pagamento do pedido).
 - **Decisões:**
   - Não juntar `geolocation` direto: resumir por CEP (média de lat/lng) em view. A pergunta 7 usa estado e não depende dela.
   - Manter frete zero (frete grátis é plausível).
   - Os 23 entregues antes da postagem ficam fora das métricas postagem→entrega. O tempo compra→entrega não é afetado.
-  - Os 3 `not_defined` saem da análise de formas de pagamento.
-  - Os 2 pagamentos de cartão com 0 parcelas saem da média de parcelas.
-  - **Em aberto:** definir se a pergunta 14 conta pagamentos, pedidos ou valor.
+  - Manter os itens mais caros (valores plausíveis, sem salto isolado).
+  - Pagamentos com valor zero (3 `not_defined` e 6 `voucher`) saem da análise de formas de pagamento.
+  - Os 2 pagamentos de cartão com 0 parcelas saem só da média de parcelas; o valor deles continua somando.
+  - Pergunta 14 (formas de pagamento): mostrar a **participação** de cada forma de duas maneiras: por **pedidos** (pedidos distintos que usaram aquela forma) e por **valor** (soma de `payment_value`). A participação por pedidos pode passar de 100% no total, porque um pedido pode usar mais de uma forma (por exemplo, cartão e voucher). A participação por valor soma 100%.
+  - Pergunta 14 (parcelas): a média de parcelas considera só pagamentos de cartão de crédito.
 
-## 4. Pendências de validação
+## 4. Decisões em aberto
 
-Consultas de inspeção ainda não rodadas: 5.2b (5 itens mais caros), 5.1d (quantos clientes sem coordenada), 5.5b (pagamentos com valor zero ou 0 parcelas) e a contagem exata de pedidos com mais de um review (3.2).
+Nenhuma no momento. Novas dúvidas entram aqui e viram decisão na seção 3.
