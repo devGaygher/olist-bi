@@ -275,6 +275,10 @@ LEFT JOIN (
 ) g ON g.geolocation_zip_code_prefix = c.customer_zip_code_prefix
 WHERE g.geolocation_zip_code_prefix IS NULL;
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 -- 5.2 Preço e frete têm valores impossíveis?
 SELECT
     COUNT(*) AS itens,
