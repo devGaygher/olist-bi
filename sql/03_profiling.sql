@@ -94,11 +94,11 @@ GROUP BY order_status;
 -- ============================================================
 -- BLOCO 3: Duplicatas e integridade entre tabelas
 -- ============================================================
--- 3.1 Existem review_id repetidos??
-
+-- 3.1 Existem review_id repetidos?
 SELECT
-    COUNT(review_id),
-    COUNT(DISTINCT review_id) AS distintos
+    COUNT(*) AS linhas,
+    COUNT(DISTINCT review_id) AS review_ids_distintos,
+    COUNT(*) - COUNT(DISTINCT review_id) AS linhas_a_mais
 FROM order_reviews;
 
 -- 3.1b Os review_id repetidos aparecem em pedidos diferentes?
@@ -112,16 +112,14 @@ HAVING COUNT(*) > 1
 ORDER BY vezes DESC
 LIMIT 10;
 
--- 3.2 Pedidos com mais de um review
-
-SELECT
-    order_id,
-    COUNT(*) AS reviews
-FROM order_reviews
-GROUP BY order_id
-HAVING COUNT(*) > 1
-ORDER BY reviews DESC
-LIMIT 10;
+-- 3.2 Quantos pedidos têm mais de um review?
+SELECT COUNT(*) AS pedidos_com_mais_de_um_review
+FROM (
+    SELECT order_id
+    FROM order_reviews
+    GROUP BY order_id
+    HAVING COUNT(*) > 1
+) AS t;
 
 -- 3.2b Lista de exemplo dos pedidos com mais de um review
 SELECT order_id, COUNT(*) AS reviews
@@ -266,6 +264,17 @@ LEFT JOIN (
 ) g ON g.geolocation_zip_code_prefix = c.customer_zip_code_prefix
 WHERE g.geolocation_zip_code_prefix IS NULL;
 
+-- 5.1d Quantos clientes ficam sem coordenada?
+SELECT
+    COUNT(*) AS linhas_customers,
+    COUNT(DISTINCT c.customer_unique_id) AS pessoas
+FROM customers c
+LEFT JOIN (
+    SELECT DISTINCT geolocation_zip_code_prefix
+    FROM geolocation
+) g ON g.geolocation_zip_code_prefix = c.customer_zip_code_prefix
+WHERE g.geolocation_zip_code_prefix IS NULL;
+
 -- 5.2 Preço e frete têm valores impossíveis?
 SELECT
     COUNT(*) AS itens,
@@ -276,6 +285,12 @@ SELECT
     SUM(freight_value = 0) AS frete_zero,
     MAX(freight_value) AS frete_max
 FROM order_items;
+
+-- 5.2b Quais são os 5 itens mais caros?
+SELECT order_id, product_id, seller_id, price, freight_value
+FROM order_items
+ORDER BY price DESC
+LIMIT 5;
 
 -- 5.3 Qual a distribuição das notas? Existe nota fora de 1 a 5 ou nula?
 SELECT
