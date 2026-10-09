@@ -4,6 +4,9 @@
 
 USE olist;
 
+SET FOREIGN_KEY_CHECKS = 0;   
+
+
 TRUNCATE TABLE customers;
 LOAD DATA LOCAL INFILE 'data/raw/olist_customers_dataset.csv'
 INTO TABLE customers
@@ -120,3 +123,4 @@ SELECT
   SUM(product_weight_g IS NULL)      AS sem_peso
 FROM products;
  
+SET FOREIGN_KEY_CHECKS = 1;
