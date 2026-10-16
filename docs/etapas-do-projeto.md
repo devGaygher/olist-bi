@@ -2,7 +2,7 @@
 
 Projeto de portfólio (simulação). A empresa, as pessoas e o cenário são fictícios;
 os dados são os do dataset público *Brazilian E-Commerce Public Dataset by Olist*
-(Kaggle). Última atualização: 09/10/2026.
+(Kaggle). Última atualização: 15/10/2026.
 
 ## Situação geral
 
@@ -15,14 +15,15 @@ os dados são os do dataset público *Brazilian E-Commerce Public Dataset by Oli
 | 5 | Profiling | `sql/03_profiling.sql` (5 blocos) | Concluída |
 | 6 | Premissas | `docs/premissas.md` | Concluída |
 | 7 | Chaves primárias e estrangeiras, com testes | `sql/02b_chaves.sql`, `sql/02c_testes.sql` | Concluída |
-| 8 | Análises em SQL das 16 perguntas | `sql/04_analises/` | A fazer |
-| 9 | Views para o BI | `sql/05_views_bi.sql` | A fazer |
+| 8 | Análises em SQL das 16 perguntas | `sql/04_analises/` | Concluída |
+| 9 | Views para o BI | `sql/05_views_bi.sql` | **Próxima** |
 | 10 | Modelo estrela e painel no Power BI (PBIP) | painel | A fazer |
 | 11 | Dicionário de dados | `docs/dicionario-dados.md` | A fazer |
 | 12 | Relatório executivo, README e apresentação | relatório de 1 página | A fazer |
 | 13 | Ensaio com o diretor e entrega final | n/a | A fazer |
 
-**Fase concluída: preparação (etapas 1 a 7).** Próxima: análises em SQL (etapa 8).
+**Fases concluídas: preparação (etapas 1 a 7) e análises (etapa 8).**
+Próxima: views para o BI (etapa 9).
 
 ---
 
@@ -31,6 +32,7 @@ os dados são os do dataset público *Brazilian E-Commerce Public Dataset by Oli
 ### 1. Alinhamento
 - O diretor pediu respostas a 16 perguntas, em 7 áreas: vendas, produtos, clientes,
   vendedores, logística, satisfação, pagamentos e pedidos.
+  <!-- revisar: são listadas 8 áreas (ou "pagamentos e pedidos" é uma só?) -->
 - Termos como receita, pedido válido e pedido entregue foram definidos antes de
   qualquer cálculo.
 - A pergunta sobre lucro será respondida com "o dado não permite": o dataset não
@@ -104,9 +106,34 @@ os dados são os do dataset público *Brazilian E-Commerce Public Dataset by Oli
 - A recarga completa de `02_carga.sql` com as chaves ativas foi testada e as
   contagens se mantiveram.
 
+### 8. Análises em SQL das 16 perguntas
+- Consultas organizadas em `sql/04_analises/`, uma por pergunta ou por área.
+  <!-- preencher: nomes dos arquivos e como estão agrupados -->
+- Todas seguem as definições do briefing e as regras de `docs/premissas.md`
+  (pedido válido, recorte jan/2017 a ago/2018, 1 review por pedido).
+  <!-- confirmar -->
+- A pergunta sobre lucro foi respondida como "o dado não permite".
+  <!-- confirmar -->
+- Resultados conferidos entre si (por exemplo, receita total batendo entre as
+  consultas de vendas e de pagamentos). <!-- preencher ou remover -->
+
 ---
 
-## Como reproduzir (etapas 3 a 7)
+## Próxima etapa: 9. Views para o BI
+
+As views são criadas no MySQL (`sql/05_views_bi.sql`) e depois consumidas pelo
+Power BI na etapa 10. Pontos a decidir ou respeitar:
+
+- As views devem embutir as premissas, para o painel não depender de filtros
+  refeitos no Power BI: pedido válido, recorte do período, 1 review por pedido e
+  `geolocation` resumida por CEP.
+- Cuidado com a granularidade: `order_items` tem várias linhas por pedido e
+  `order_payments` também, então juntar as duas direto multiplica a receita.
+- Reaproveitar as consultas da etapa 8 como base de cada view.
+
+---
+
+## Como reproduzir (etapas 3 a 8)
 
 Da raiz do projeto:
 
@@ -115,6 +142,8 @@ Da raiz do projeto:
 & $mysql -u root -p -D olist --local-infile=1 --show-warnings -e "source sql/02_carga.sql"
 & $mysql -u root -p -D olist -e "source sql/02b_chaves.sql"
 & $mysql -u root -p -D olist -e "source sql/02c_testes.sql"
+& $mysql -u root -p -D olist -e "source sql/03_profiling.sql"
+& $mysql -u root -p -D olist -e "source sql/04_analises/<arquivo>.sql"
 ```
 
 `02b_chaves.sql` não é reexecutável: para rodar de novo, recrie o banco a partir
