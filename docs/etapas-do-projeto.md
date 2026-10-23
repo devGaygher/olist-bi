@@ -2,7 +2,7 @@
 
 Projeto de portfólio (simulação). A empresa, as pessoas e o cenário são fictícios;
 os dados são os do dataset público *Brazilian E-Commerce Public Dataset by Olist*
-(Kaggle). Última atualização: 16/10/2026.
+(Kaggle). Última atualização: 23/10/2026.
 
 ## Situação geral
 
@@ -17,13 +17,14 @@ os dados são os do dataset público *Brazilian E-Commerce Public Dataset by Oli
 | 7 | Chaves primárias e estrangeiras, com testes | `sql/02b_chaves.sql`, `sql/02c_testes.sql` | Concluída |
 | 8 | Análises em SQL das 16 perguntas | `sql/04_analises/` (7 arquivos) | Concluída |
 | 9 | Views para o BI | `sql/05_views/` (6 views) | Concluída |
-| 10 | Modelo estrela e painel no Power BI (PBIP) | painel | **Próxima** |
+| 10 | Modelo estrela e painel no Power BI (PBIP) | `powerbi/olist-bi.pbip` | **Em andamento** |
 | 11 | Dicionário de dados | `docs/dicionario-dados.md` | A fazer |
 | 12 | Relatório executivo, README e apresentação | relatório de 1 página | A fazer |
 | 13 | Ensaio com o diretor e entrega final | n/a | A fazer |
 
 **Fases concluídas: preparação (etapas 1 a 7), análises (etapa 8) e views para o BI
-(etapa 9).** Próxima: modelo estrela e painel no Power BI (etapa 10).
+(etapa 9).** Em andamento: modelo estrela e painel no Power BI (etapa 10); o modelo e
+as medidas estão prontos e a página de visão executiva está em acabamento.
 
 ---
 
@@ -138,7 +139,7 @@ valor zero fora) ficam dentro das views, para o painel não refazer filtros.
 | `vw_dim_cliente` | 1 por `customer_id` | traz `customer_unique_id` para contar pessoas e recompra |
 | `vw_dim_vendedor` | 1 por vendedor | cidade e estado |
 | `vw_dim_produtos` | 1 por produto | categoria traduzida, com `COALESCE` e `sem_categoria` |
-| `vw_fato_pedidos` | 1 por pedido (todos do período) | flag `pedido_valido`; prazo, dias até a entrega e nota só para pedido válido |
+| `vw_fato_pedidos` | 1 por pedido (todos do período) | flag `pedido_valido`; prazo, dias até a entrega, `dias_atraso` (entrega real menos estimada; negativo = adiantado) e nota só para pedido válido |
 | `vw_fato_itens` | 1 por item (pedidos válidos) | `preco` e `frete` separados |
 | `vw_fato_pagamentos` | 1 por pagamento (válidos, sem valor zero) | forma e parcelas |
 
@@ -153,6 +154,49 @@ valor zero fora) ficam dentro das views, para o painel não refazer filtros.
   - dimensões: 99.441 clientes, 3.095 vendedores e 32.951 produtos;
   - `vw_fato_pedidos`: linhas iguais aos pedidos distintos;
   - itens e pagamentos sem pedido correspondente: 0 e 0.
+
+---
+
+## Etapa em andamento
+
+### 10. Modelo estrela e painel no Power BI
+O painel fica em `powerbi/olist-bi.pbip`, no formato PBIP (arquivos de texto, que
+funcionam bem com o Git). A conexão com o MySQL usa o modo Importar e lê apenas as 6
+views da etapa 9, nunca as tabelas brutas.
+
+**Modelo.** Cinco relacionamentos 1:N, com filtro em uma direção:
+
+| Lado "um" | Lado "muitos" |
+|---|---|
+| `vw_dim_cliente[customer_id]` | `vw_fato_pedidos[customer_id]` |
+| `vw_dim_vendedor[seller_id]` | `vw_fato_itens[seller_id]` |
+| `vw_dim_produtos[product_id]` | `vw_fato_itens[product_id]` |
+| `vw_fato_pedidos[order_id]` | `vw_fato_itens[order_id]` |
+| `vw_fato_pedidos[order_id]` | `vw_fato_pagamentos[order_id]` |
+
+Mais `Calendario[Date]` para `vw_fato_pedidos[data_compra]`. A tabela de pedidos é o
+eixo do modelo; itens e pagamentos se ligam só a ela e nunca entre si, para a receita
+não ser multiplicada.
+
+**Calendário.** Criado em DAX para jan/2017 a ago/2018 (o recorte das premissas), com
+ano, mês, rótulo do mês ("jan/17") e dia da semana, cada um com ordenação própria, e
+marcado como tabela de datas.
+
+**Medidas** (tabela `_Medidas`): Receita, Pedidos, Ticket Medio, Receita LY, Receita
+2017 e 2018 jan-ago, Var YoY %, Receita Acumulada, % No Prazo, Tempo Medio Entrega,
+Atraso Medio e Nota Media. A comparação de crescimento usa sempre jan-ago nos dois
+anos, porque só 2017 tem 12 meses e 2018 termina em agosto.
+
+**Conferências já feitas contra o SQL (etapa 8):**
+- receita total de R$ 13.449.529,68 e 97.905 pedidos, iguais nos dois lados;
+- 99.441 clientes, 3.095 vendedores e 32.951 produtos.
+
+**Pendente:**
+- conferir % no prazo, tempo médio de entrega, atraso médio e nota média contra as
+  consultas das etapas 8 (logística e satisfação);
+- conferir receita por estado, comparação 2017 x 2018 e a matriz mês a mês;
+- fechar a página de visão executiva e montar as páginas por área (vendas, produtos,
+  clientes, vendedores, logística, satisfação, pagamentos e pedidos).
 
 ---
 
@@ -178,3 +222,7 @@ Da raiz do projeto:
 
 `02b_chaves.sql` não é reexecutável: para rodar de novo, recrie o banco a partir
 do `01_schema.sql`.
+
+Para abrir o painel (etapa 10), instale o MySQL Connector/NET, abra
+`powerbi/olist-bi.pbip` no Power BI Desktop e informe as credenciais do MySQL na
+primeira atualização. A senha não fica nos arquivos do projeto.
