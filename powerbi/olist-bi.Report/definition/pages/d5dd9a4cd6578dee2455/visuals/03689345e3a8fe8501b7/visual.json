@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
-  "name": "99685202c2147d2c5658",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "03689345e3a8fe8501b7",
   "position": {
-    "x": 411.25,
-    "y": 220,
-    "z": 11501,
-    "height": 46.25,
-    "width": 125,
-    "tabOrder": 11001
+    "x": 793.63636363636363,
+    "y": 517.27272727272725,
+    "z": 9000,
+    "height": 25.454545454545453,
+    "width": 129.09090909090909,
+    "tabOrder": 9000
   },
   "visual": {
     "visualType": "textbox",
@@ -19,13 +19,15 @@
               {
                 "textRuns": [
                   {
-                    "value": "Black Friday",
+                    "value": "Black Friday (24/11)",
                     "textStyle": {
                       "fontWeight": "bold",
-                      "color": "#1e3a8a"
+                      "fontSize": "10pt",
+                      "color": "#2f5fb3"
                     }
                   }
-                ]
+                ],
+                "horizontalTextAlignment": "center"
               }
             ]
           }

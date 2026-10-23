@@ -1,0 +1,133 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "ebd358ab760fb222566d",
+  "position": {
+    "x": 1020,
+    "y": 440,
+    "z": 10000,
+    "height": 275,
+    "width": 236,
+    "tabOrder": 10000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": " Como ler esta página",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "10pt",
+                      "color": "#111827"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Receita = soma de price, sem frete, de pedidos válidos.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#1f2937"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Crescimento: jan-ago de 2018 contra jan-ago de 2017.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#1f2937"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "O dia e o horário com mais pedidos são fato; a causa é hipótese.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#1f2937"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Black Friday: o painel mede o aumento de receita e pedidos em torno de 24/11/2017. Se valeu a pena, o dado não diz: o dataset não tem margem nem desconto.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#1f2937"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E1E4E8'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

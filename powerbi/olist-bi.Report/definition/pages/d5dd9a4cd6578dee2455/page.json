@@ -1,0 +1,14 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "d5dd9a4cd6578dee2455",
+  "displayName": "Vendas",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "pageBinding": {
+    "name": "291431cb32e9ebafd810",
+    "type": "Default",
+    "parameters": [],
+    "acceptsFilterContext": "None"
+  }
+}
