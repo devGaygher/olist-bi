@@ -1,0 +1,44 @@
+table 'olist vw_dim_cliente'
+	lineageTag: 511b3243-0cb0-4c81-ae77-904dd0a57215
+
+	column customer_id
+		dataType: string
+		lineageTag: 14e3f787-3204-4bad-8fe3-56708d986fe6
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_unique_id
+		dataType: string
+		lineageTag: ab3f082b-1b5c-4090-b6a6-3fddd5c2eec1
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cidade
+		dataType: string
+		lineageTag: 0135b866-fb38-4b56-aab1-8b5006910ab7
+		summarizeBy: none
+		sourceColumn: cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column estado
+		dataType: string
+		lineageTag: 5ccb4745-239d-4469-8cc9-3c38a8e4a83b
+		summarizeBy: none
+		sourceColumn: estado
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'olist vw_dim_cliente' = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost", "olist", [ReturnSingleDatabase=true]),
+				    olist_vw_dim_cliente = Fonte{[Schema="olist",Item="vw_dim_cliente"]}[Data]
+				in
+				    olist_vw_dim_cliente
+

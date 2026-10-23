@@ -1,0 +1,28 @@
+table 'olist vw_dim_produtos'
+	lineageTag: 1ce48395-60fd-4b92-98e4-ad7efee6e0d7
+
+	column product_id
+		dataType: string
+		lineageTag: 1306b078-5503-4f43-848b-187a8cdc41f3
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria
+		dataType: string
+		lineageTag: 68efa9f8-efec-48bb-bfe7-8888406c8aae
+		summarizeBy: none
+		sourceColumn: categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'olist vw_dim_produtos' = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost", "olist", [ReturnSingleDatabase=true]),
+				    olist_vw_dim_produtos = Fonte{[Schema="olist",Item="vw_dim_produtos"]}[Data]
+				in
+				    olist_vw_dim_produtos
+

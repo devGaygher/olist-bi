@@ -1,0 +1,57 @@
+table 'olist vw_fato_pagamentos'
+	lineageTag: 46eccf0a-3c44-46df-8fab-8e8c30ecbfa2
+
+	column order_id
+		dataType: string
+		lineageTag: 974b999b-7a62-4ebe-ab4d-9209e339f278
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column sequencia
+		dataType: int64
+		formatString: 0
+		lineageTag: 692a725b-9a7c-4e48-aff8-e5d4f3a08838
+		summarizeBy: sum
+		sourceColumn: sequencia
+
+		annotation SummarizationSetBy = Automatic
+
+	column forma_pagamento
+		dataType: string
+		lineageTag: 1a6deab0-208f-4911-9eef-5a5495d70255
+		summarizeBy: none
+		sourceColumn: forma_pagamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column parcelas
+		dataType: int64
+		formatString: 0
+		lineageTag: 47f9ddff-ce75-4fcf-813c-cda12da8cc02
+		summarizeBy: sum
+		sourceColumn: parcelas
+
+		annotation SummarizationSetBy = Automatic
+
+	column valor
+		dataType: double
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: b5f1b255-c7de-41cd-b5c9-b922a9105576
+		summarizeBy: sum
+		sourceColumn: valor
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"kgp-Latn-BR"}
+
+	partition 'olist vw_fato_pagamentos' = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost", "olist", [ReturnSingleDatabase=true]),
+				    olist_vw_fato_pagamentos = Fonte{[Schema="olist",Item="vw_fato_pagamentos"]}[Data]
+				in
+				    olist_vw_fato_pagamentos
+

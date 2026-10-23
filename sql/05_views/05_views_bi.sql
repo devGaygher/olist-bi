@@ -90,6 +90,10 @@ CREATE OR REPLACE VIEW vw_fato_pedidos AS
               AND o.order_delivered_customer_date IS NOT NULL
              THEN (o.order_delivered_customer_date <= o.order_estimated_delivery_date)
         END AS entregue_no_prazo,
+	CASE WHEN o.order_status NOT IN ('canceled', 'unavailable')
+              AND o.order_delivered_customer_date IS NOT NULL
+             THEN DATEDIFF(o.order_delivered_customer_date, o.order_estimated_delivery_date)
+        END AS dias_atraso,
         CASE WHEN o.order_status NOT IN ('canceled', 'unavailable')
              THEN r.review_score
         END AS nota_review

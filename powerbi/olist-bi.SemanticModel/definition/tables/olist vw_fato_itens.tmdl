@@ -1,0 +1,95 @@
+table 'olist vw_fato_itens'
+	lineageTag: 174d6e0f-55d0-4c38-a8de-6aca64885c18
+
+	column order_id
+		dataType: string
+		lineageTag: df8b7d9e-f059-47fe-8870-abdcaa8e2bb6
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: cad92954-0112-4ca7-bf17-622c03cac7c4
+		summarizeBy: sum
+		sourceColumn: order_item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: string
+		lineageTag: a600d2c8-d833-470e-90e0-ca9ea0378f91
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_id
+		dataType: string
+		lineageTag: d899d692-7647-4435-b8f8-b0d8ff5a8334
+		summarizeBy: none
+		sourceColumn: seller_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column preco
+		dataType: double
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 165cd9a4-1d9f-40e1-8772-04034202ebd2
+		summarizeBy: sum
+		sourceColumn: preco
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"yrl-Latn-BR"}
+
+	column frete
+		dataType: double
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 7100ac9c-0e65-47a1-9748-4a65fcedfd9f
+		summarizeBy: sum
+		sourceColumn: frete
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"yrl-Latn-BR"}
+
+	column data_limite_postagem
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: c922cbd3-a555-4667-99e9-a02a0c8694ea
+		summarizeBy: none
+		sourceColumn: data_limite_postagem
+
+		variation Variation
+			isDefault
+			relationship: 60716737-1a7f-456a-86ca-630bf6faddde
+			defaultHierarchy: LocalDateTable_e3b85cac-3a99-44a6-b300-08de2e0228ee.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_postagem
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ebd65a61-dea3-4ba7-90cc-b729ee973d2d
+		summarizeBy: none
+		sourceColumn: data_postagem
+
+		variation Variation
+			isDefault
+			relationship: 1a571279-dd90-483d-9241-bc6094f9509a
+			defaultHierarchy: LocalDateTable_22eaad7c-498b-4c66-a887-28db16368377.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'olist vw_fato_itens' = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost", "olist", [ReturnSingleDatabase=true]),
+				    olist_vw_fato_itens = Fonte{[Schema="olist",Item="vw_fato_itens"]}[Data]
+				in
+				    olist_vw_fato_itens
+
