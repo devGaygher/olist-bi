@@ -1,0 +1,31 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+annotation PBI_QueryOrder = ["olist vw_dim_cliente","olist vw_dim_produtos","olist vw_fato_itens","olist vw_dim_vendedor","olist vw_fato_pagamentos","olist vw_fato_pedidos","_Medidas"]
+
+ref table 'olist vw_dim_cliente'
+ref table 'olist vw_dim_produtos'
+ref table 'olist vw_fato_itens'
+ref table DateTableTemplate_bd0ffd0e-178e-45fd-9bb8-26ac7a33aa1d
+ref table LocalDateTable_e3b85cac-3a99-44a6-b300-08de2e0228ee
+ref table LocalDateTable_22eaad7c-498b-4c66-a887-28db16368377
+ref table 'olist vw_dim_vendedor'
+ref table 'olist vw_fato_pagamentos'
+ref table 'olist vw_fato_pedidos'
+ref table LocalDateTable_bd4b3c20-8634-4319-98a8-5f0bcf85b533
+ref table LocalDateTable_45a6ae82-a717-4bb0-a91e-23fe2f985460
+ref table LocalDateTable_f4fa01b7-3f93-49df-8f4b-89b927f2dff6
+ref table Calendario
+ref table _Medidas
+
+ref cultureInfo pt-BR
+

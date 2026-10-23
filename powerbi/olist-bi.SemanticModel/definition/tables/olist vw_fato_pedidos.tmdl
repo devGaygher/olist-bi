@@ -1,0 +1,140 @@
+table 'olist vw_fato_pedidos'
+	lineageTag: 1dc93a54-bb0b-46a9-9d37-0c837d45c2f7
+
+	column order_id
+		dataType: string
+		lineageTag: 47e6d5ae-edf2-4784-bdfb-68f2f4a4c26b
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: ef39e5f9-8138-4d86-9ada-65ee8fddcfff
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_hora_compra
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 70412afd-bf36-4604-9559-58718627d5e6
+		summarizeBy: none
+		sourceColumn: data_hora_compra
+
+		variation Variation
+			isDefault
+			relationship: 95450bf0-4443-4c83-a811-da75c650e150
+			defaultHierarchy: LocalDateTable_bd4b3c20-8634-4319-98a8-5f0bcf85b533.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_compra
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f97006b1-1024-412d-9f81-672b921d4c79
+		summarizeBy: none
+		sourceColumn: data_compra
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column status_pedido
+		dataType: string
+		lineageTag: 03c7332b-4801-45ea-9e03-511e22c41837
+		summarizeBy: none
+		sourceColumn: status_pedido
+
+		annotation SummarizationSetBy = Automatic
+
+	column pedido_valido
+		dataType: int64
+		formatString: 0
+		lineageTag: 955ab566-bdd4-464b-808e-be18a619b3e2
+		summarizeBy: sum
+		sourceColumn: pedido_valido
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_entrega_estimada
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0ecb670a-0fdc-48f0-96c1-a9a92753a394
+		summarizeBy: none
+		sourceColumn: data_entrega_estimada
+
+		variation Variation
+			isDefault
+			relationship: bc2715ec-5ecd-48ad-a158-2f8a10716e26
+			defaultHierarchy: LocalDateTable_45a6ae82-a717-4bb0-a91e-23fe2f985460.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_entrega_real
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 088f1b08-f1fc-4b29-8b95-1c2d603731d3
+		summarizeBy: none
+		sourceColumn: data_entrega_real
+
+		variation Variation
+			isDefault
+			relationship: 7f390357-0ada-436e-8053-fe5d1f835e6f
+			defaultHierarchy: LocalDateTable_f4fa01b7-3f93-49df-8f4b-89b927f2dff6.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_ate_entrega
+		dataType: int64
+		formatString: 0
+		lineageTag: 44081b1c-40ce-49e9-829d-00ce3732a0e6
+		summarizeBy: sum
+		sourceColumn: dias_ate_entrega
+
+		annotation SummarizationSetBy = Automatic
+
+	column entregue_no_prazo
+		dataType: int64
+		formatString: 0
+		lineageTag: ccc6d450-3721-4a78-8585-c1b1fbc72638
+		summarizeBy: sum
+		sourceColumn: entregue_no_prazo
+
+		annotation SummarizationSetBy = Automatic
+
+	column nota_review
+		dataType: int64
+		formatString: 0
+		lineageTag: c0b4911d-ff9f-415f-9805-d610f3f78e52
+		summarizeBy: sum
+		sourceColumn: nota_review
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_atraso
+		dataType: int64
+		formatString: 0
+		lineageTag: b5bba98a-8b34-47ea-9e1b-b44dc0ec1006
+		summarizeBy: sum
+		sourceColumn: dias_atraso
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Situacao Entrega' = SWITCH('olist vw_fato_pedidos'[entregue_no_prazo],1, "No prazo", 0 , "Com atraso")
+		lineageTag: 8700f222-ce43-4c86-8c9a-7055e63e0672
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'olist vw_fato_pedidos' = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost", "olist", [ReturnSingleDatabase=true]),
+				    olist_vw_fato_pedidos = Fonte{[Schema="olist",Item="vw_fato_pedidos"]}[Data]
+				in
+				    olist_vw_fato_pedidos
+

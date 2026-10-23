@@ -1,0 +1,12 @@
+{
+  "name": "Olist BI",
+  "dataColors": ["#5B82CC", "#1E3A8A", "#A9BEE6", "#B45309", "#6B7280", "#3F6BBF", "#8FAEE3", "#E6EDF9"],
+  "background": "#FFFFFF",
+  "foreground": "#111827",
+  "tableAccent": "#1E3A8A",
+  "textClasses": {
+    "title": { "fontFace": "Segoe UI Semibold", "fontSize": 13, "color": "#111827" },
+    "label": { "fontFace": "Segoe UI", "fontSize": 11, "color": "#4B5563" },
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 28, "color": "#111827" }
+  }
+}

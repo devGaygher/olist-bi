@@ -1,0 +1,92 @@
+table _Medidas
+	lineageTag: e42f7bb3-5517-4e8e-ad8e-5e00dac4f4cc
+
+	measure Receita = SUM( 'olist vw_fato_itens'[preco])
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 952624ae-8c17-45bb-b5e5-e3845eca0a38
+
+		annotation PBI_FormatHint = {"currencyCulture":"kgp-Latn-BR"}
+
+	measure Pedidos = DISTINCTCOUNT( 'olist vw_fato_itens'[order_id] )
+		formatString: #,0
+		lineageTag: eef8880b-91fd-42fc-83e5-6e960d8782f5
+
+	measure 'Ticket Medio' = DIVIDE( [Receita], [Pedidos])
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 6ff8a882-f887-4e40-96d8-ad92e7e5625f
+
+		annotation PBI_FormatHint = {"currencyCulture":"kgp-Latn-BR"}
+
+	measure 'Receita LY' = CALCULATE([Receita], SAMEPERIODLASTYEAR(Calendario[Date]))
+		lineageTag: cdbf477f-1b60-4086-8ad9-b147e4ed2b2f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Receita 2017 JanAgo' = ```
+			CALCULATE( [Receita], Calendario[Ano] = 2017, Calendario[MesNum] <= 8) 
+			```
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 1135ea30-43c1-426a-8eb9-3c37f7bd7a0b
+
+		annotation PBI_FormatHint = {"currencyCulture":"kgp-Latn-BR"}
+
+	measure 'Receita 2018 JanAgo' = CALCULATE([Receita], Calendario[Ano] = 2018, Calendario[MesNum] <= 8)
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 520caecc-69be-41c7-b0dc-f8a5e06fbc7c
+
+		annotation PBI_FormatHint = {"currencyCulture":"kgp-Latn-BR"}
+
+	measure 'Var YoY %' = DIVIDE([Receita 2018 JanAgo] - [Receita 2017 JanAgo], [Receita 2017 JanAgo])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: c636562e-327d-4573-88d0-41375ae8b533
+
+	measure '% No Prazo' =
+			DIVIDE(
+			    CALCULATE(COUNTROWS('olist vw_fato_pedidos'), 'olist vw_fato_pedidos'[entregue_no_prazo] = 1),
+			    CALCULATE( COUNTROWS('olist vw_fato_pedidos'), NOT ISBLANK('olist vw_fato_pedidos'[entregue_no_prazo])))
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 8134e410-0b72-413a-b5d3-c4d55e9e7bec
+
+	measure 'Tempo Medio Entrega' = AVERAGE('olist vw_fato_pedidos'[dias_ate_entrega])
+		lineageTag: 8082e542-1e0b-478c-81f3-a6ea0e0ddd7a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Atraso Medio' =
+			
+			CALCULATE( AVERAGE('olist vw_fato_pedidos'[dias_atraso]), 'olist vw_fato_pedidos'[dias_atraso] > 0)
+		lineageTag: a8df44ca-a2b4-4e52-bf13-ef77d8cb6a54
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Nota Media' = average('olist vw_fato_pedidos'[nota_review])
+		formatString: 0.0
+		lineageTag: 6769c3f0-2798-4dd4-bec7-4dc2ff9305f6
+
+	measure 'Receita Acumulada' = TOTALYTD([Receita], Calendario[Date])
+		lineageTag: bada8310-538c-491c-90ee-ed60fbf8540b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Coluna 1'
+		dataType: string
+		isHidden
+		lineageTag: 67f7ca9e-7140-4706-b066-d10e4a5a7734
+		summarizeBy: none
+		sourceColumn: Coluna 1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Medidas = m
+		mode: import
+		source =
+				let
+				    Fonte = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Coluna 1" = _t]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"Coluna 1", type text}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Table
+

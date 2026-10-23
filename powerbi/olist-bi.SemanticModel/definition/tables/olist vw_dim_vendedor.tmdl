@@ -1,0 +1,36 @@
+table 'olist vw_dim_vendedor'
+	lineageTag: 2acedc8b-daf9-4bea-8a91-38cbb08044d3
+
+	column seller_id
+		dataType: string
+		lineageTag: 4ce0abb4-88db-4b23-864d-a979bd1eee40
+		summarizeBy: none
+		sourceColumn: seller_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cidade
+		dataType: string
+		lineageTag: 1c672a53-9b7f-42ef-adfb-32040abd3e01
+		summarizeBy: none
+		sourceColumn: cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column estado
+		dataType: string
+		lineageTag: 24cc0283-dcb2-436b-96b9-2f659a1c01e3
+		summarizeBy: none
+		sourceColumn: estado
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'olist vw_dim_vendedor' = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost", "olist", [ReturnSingleDatabase=true]),
+				    olist_vw_dim_vendedor = Fonte{[Schema="olist",Item="vw_dim_vendedor"]}[Data]
+				in
+				    olist_vw_dim_vendedor
+

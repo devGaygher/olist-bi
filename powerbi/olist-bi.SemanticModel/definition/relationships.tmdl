@@ -1,0 +1,49 @@
+relationship 60716737-1a7f-456a-86ca-630bf6faddde
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'olist vw_fato_itens'.data_limite_postagem
+	toColumn: LocalDateTable_e3b85cac-3a99-44a6-b300-08de2e0228ee.Date
+
+relationship 1a571279-dd90-483d-9241-bc6094f9509a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'olist vw_fato_itens'.data_postagem
+	toColumn: LocalDateTable_22eaad7c-498b-4c66-a887-28db16368377.Date
+
+relationship 95450bf0-4443-4c83-a811-da75c650e150
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'olist vw_fato_pedidos'.data_hora_compra
+	toColumn: LocalDateTable_bd4b3c20-8634-4319-98a8-5f0bcf85b533.Date
+
+relationship bc2715ec-5ecd-48ad-a158-2f8a10716e26
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'olist vw_fato_pedidos'.data_entrega_estimada
+	toColumn: LocalDateTable_45a6ae82-a717-4bb0-a91e-23fe2f985460.Date
+
+relationship 7f390357-0ada-436e-8053-fe5d1f835e6f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'olist vw_fato_pedidos'.data_entrega_real
+	toColumn: LocalDateTable_f4fa01b7-3f93-49df-8f4b-89b927f2dff6.Date
+
+relationship 0210e4ec-bd2b-47cd-ed92-bcaeefc653a2
+	fromColumn: 'olist vw_fato_pedidos'.customer_id
+	toColumn: 'olist vw_dim_cliente'.customer_id
+
+relationship d2f355f7-a296-05ff-5abc-a19213201e29
+	fromColumn: 'olist vw_fato_itens'.seller_id
+	toColumn: 'olist vw_dim_vendedor'.seller_id
+
+relationship a2ff7e6f-abba-c419-b515-a94824c9016e
+	fromColumn: 'olist vw_fato_itens'.product_id
+	toColumn: 'olist vw_dim_produtos'.product_id
+
+relationship 68cb49cd-1292-4769-c8f6-a256fe9baee5
+	fromColumn: 'olist vw_fato_itens'.order_id
+	toColumn: 'olist vw_fato_pedidos'.order_id
+
+relationship fe520757-cb9a-29cd-19a8-2509127c33c8
+	fromColumn: 'olist vw_fato_pagamentos'.order_id
+	toColumn: 'olist vw_fato_pedidos'.order_id
+
+relationship f0bc6902-ac55-a36d-3bac-1c25251daf24
+	fromColumn: 'olist vw_fato_pedidos'.data_compra
+	toColumn: Calendario.Date
+

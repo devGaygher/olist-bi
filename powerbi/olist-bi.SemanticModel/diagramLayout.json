@@ -1,0 +1,126 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 103.18315478114391,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "olist vw_dim_cliente",
+          "nodeLineageTag": "511b3243-0cb0-4c81-ae77-904dd0a57215",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 729.14912311260036
+          },
+          "nodeIndex": "olist vw_dim_produtos",
+          "nodeLineageTag": "1ce48395-60fd-4b92-98e4-ad7efee6e0d7",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 397.21855481563188
+          },
+          "nodeIndex": "olist vw_dim_vendedor",
+          "nodeLineageTag": "2acedc8b-daf9-4bea-8a91-38cbb08044d3",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 331.07474851197583,
+            "y": 517.96404586894255
+          },
+          "nodeIndex": "olist vw_fato_itens",
+          "nodeLineageTag": "174d6e0f-55d0-4c38-a8de-6aca64885c18",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 649.87972417620767,
+            "y": 0
+          },
+          "nodeIndex": "olist vw_fato_pagamentos",
+          "nodeLineageTag": "46eccf0a-3c44-46df-8fab-8e8c30ecbfa2",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 322.32101584413022,
+            "y": 55.315429719960065
+          },
+          "nodeIndex": "olist vw_fato_pedidos",
+          "nodeLineageTag": "1dc93a54-bb0b-46a9-9d37-0c837d45c2f7",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 648.23929510848654,
+            "y": 516.21767371786109
+          },
+          "nodeIndex": "Calendario",
+          "nodeLineageTag": "cabe8450-1a2a-4ceb-b569-a75f48b43d51",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 933.87972417620767,
+            "y": 376.57456155630018
+          },
+          "nodeIndex": "_Medidas",
+          "nodeLineageTag": "e42f7bb3-5517-4e8e-ad8e-5e00dac4f4cc",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 1
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 79.553182037699813,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}
