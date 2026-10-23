@@ -5370,25 +5370,6 @@ cultureInfo pt-BR
 			        }
 			      ]
 			    },
-			    "entity__medida.coluna_1": {
-			      "Definition": {
-			        "Binding": {
-			          "ConceptualEntity": "_Medidas",
-			          "ConceptualProperty": "Coluna 1"
-			        }
-			      },
-			      "State": "Generated",
-			      "Visibility": {
-			        "Value": "Hidden"
-			      },
-			      "Terms": [
-			        {
-			          "coluna 1": {
-			            "State": "Generated"
-			          }
-			        }
-			      ]
-			    },
 			    "entity__medida.receita": {
 			      "Definition": {
 			        "Binding": {
@@ -5517,16 +5498,6 @@ cultureInfo pt-BR
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.739
-			          }
-			        },
-			        {
-			          "vs jan–ago/2017": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]

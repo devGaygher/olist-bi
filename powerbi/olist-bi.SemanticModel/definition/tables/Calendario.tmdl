@@ -82,7 +82,7 @@ table Calendario
 				ADDCOLUMNS (
 				    CALENDAR ( DATE ( 2017, 1, 1 ), DATE ( 2018, 8, 31 ) ),
 				    "Ano", YEAR ( [Date] ),
-				    "Mes", FORMAT([Date], "mmmm"),
+				    "Mes", FORMAT([Date], "mmm"),
 				    "MesNum", MONTH ( [Date] ),
 				    "MesOrdem", YEAR ( [Date] ) * 100 + MONTH ( [Date] ),
 				    "MesRotulo",
