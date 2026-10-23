@@ -129,6 +129,36 @@ table 'olist vw_fato_pedidos'
 
 		annotation SummarizationSetBy = Automatic
 
+	column 'Faixa Horario' = ```
+			
+			VAR h = HOUR('olist vw_fato_pedidos'[data_hora_compra])
+			RETURN 
+			    SWITCH(
+			        TRUE(),
+			        h < 6, "Madrugada (0-5h)",
+			        h < 12, "Manhã (6-11h)",
+			        h< 18, "Tarde (12-17h)",
+			        "Noite (18-23h)")
+			```
+		lineageTag: 6eb52eee-3a86-46db-a163-542dddac0eec
+		summarizeBy: none
+		sortByColumn: 'Faixa Ordem'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa Ordem' =
+			
+			VAR h = HOUR('olist vw_fato_pedidos'[data_hora_compra])
+			RETURN
+			    SWITCH( TRUE(), h<6,1,h<12,2,h<18,3,4)
+		formatString: 0
+		lineageTag: 01154ad4-3cc2-47a7-91a8-af84cc7a741d
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
 	partition 'olist vw_fato_pedidos' = m
 		mode: import
 		source =
