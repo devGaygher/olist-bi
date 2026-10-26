@@ -69,6 +69,34 @@ table _Medidas
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	measure 'Nota Media Categoria' = ```
+			
+			    CALCULATE([Nota Media], CROSSFILTER('olist vw_fato_itens'[order_id],'olist vw_fato_pedidos'[order_id], BOTH))
+			```
+		lineageTag: a2d5a676-8787-4117-b815-fa7f491c8452
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Pedidos Avaliados' =
+			
+			Calculate(
+			    DISTINCTCOUNT('olist vw_fato_pedidos'[order_id]),'olist vw_fato_pedidos'[nota_review] <> BLANK(),
+			    CROSSFILTER('olist vw_fato_itens'[order_id], 'olist vw_fato_pedidos'[order_id], BOTH)
+			)
+		formatString: 0
+		lineageTag: 5712b4ff-e2c1-4077-9822-2c87405529ba
+
+	measure 'Nota Media Categoria 100+' =
+			
+			IF(
+			    [Pedidos Avaliados] > 100,
+			    [Nota Media Categoria],
+			    BLANK()
+			)
+		lineageTag: 4e539cdb-22b9-4827-b237-381e1cfe7cce
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	partition _Medidas = m
 		mode: import
 		source =
