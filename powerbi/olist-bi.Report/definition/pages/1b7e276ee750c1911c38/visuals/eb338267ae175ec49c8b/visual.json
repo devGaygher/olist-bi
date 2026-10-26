@@ -67,7 +67,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "A nota considera só quem avaliou; 734 pedidos ficaram sem avaliação.",
+                    "value": "A nota média representa só quem avaliou: 727 dos 97.905 pedidos (0,74%) não têm avaliação.",
                     "textStyle": {
                       "fontSize": "12pt",
                       "color": "#000000"
