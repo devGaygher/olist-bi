@@ -95,6 +95,17 @@ table _Medidas
 		formatString: 0.00
 		lineageTag: 4e539cdb-22b9-4827-b237-381e1cfe7cce
 
+	measure 'Categorias 100+' =
+			
+			COUNTROWS(
+			    FILTER(
+			        VALUES('olist vw_dim_produtos'[categoria]),
+			        NOT ISBLANK([Nota Media Categoria 100+])
+			    )
+			)
+		formatString: 0
+		lineageTag: 2d900360-40c4-4296-b321-55abd295964d
+
 	partition _Medidas = m
 		mode: import
 		source =
