@@ -17,22 +17,17 @@
           "projections": [
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "olist vw_dim_produtos"
-                        }
-                      },
-                      "Property": "categoria"
+                    "SourceRef": {
+                      "Entity": "_Medidas"
                     }
                   },
-                  "Function": 2
+                  "Property": "Categorias 100+"
                 }
               },
-              "queryRef": "Min(olist vw_dim_produtos.categoria)",
-              "nativeQueryRef": "Contagem de categoria"
+              "queryRef": "_Medidas.Categorias 100+",
+              "nativeQueryRef": "Categorias 100+"
             }
           ]
         }
@@ -41,18 +36,13 @@
         "sort": [
           {
             "field": {
-              "Aggregation": {
+              "Measure": {
                 "Expression": {
-                  "Column": {
-                    "Expression": {
-                      "SourceRef": {
-                        "Entity": "olist vw_dim_produtos"
-                      }
-                    },
-                    "Property": "categoria"
+                  "SourceRef": {
+                    "Entity": "_Medidas"
                   }
                 },
-                "Function": 2
+                "Property": "Categorias 100+"
               }
             },
             "direction": "Descending"
@@ -239,123 +229,16 @@
         "howCreated": "User"
       },
       {
-        "name": "2dcfca6dfc647d6aa820",
+        "name": "4922b69f4311122f6dfa",
         "ordinal": 1,
         "field": {
-          "Column": {
+          "Measure": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Calendario"
+                "Entity": "_Medidas"
               }
             },
-            "Property": "MesRotulo"
-          }
-        },
-        "type": "TopN",
-        "filter": {
-          "Version": 2,
-          "From": [
-            {
-              "Name": "subquery",
-              "Expression": {
-                "Subquery": {
-                  "Query": {
-                    "Version": 2,
-                    "From": [
-                      {
-                        "Name": "c",
-                        "Entity": "Calendario",
-                        "Type": 0
-                      },
-                      {
-                        "Name": "_",
-                        "Entity": "_Medidas",
-                        "Type": 0
-                      }
-                    ],
-                    "Select": [
-                      {
-                        "Column": {
-                          "Expression": {
-                            "SourceRef": {
-                              "Source": "c"
-                            }
-                          },
-                          "Property": "MesRotulo"
-                        },
-                        "Name": "field"
-                      }
-                    ],
-                    "OrderBy": [
-                      {
-                        "Direction": 2,
-                        "Expression": {
-                          "Measure": {
-                            "Expression": {
-                              "SourceRef": {
-                                "Source": "_"
-                              }
-                            },
-                            "Property": "Receita"
-                          }
-                        }
-                      }
-                    ],
-                    "Top": 1
-                  }
-                }
-              },
-              "Type": 2
-            },
-            {
-              "Name": "c",
-              "Entity": "Calendario",
-              "Type": 0
-            }
-          ],
-          "Where": [
-            {
-              "Condition": {
-                "In": {
-                  "Expressions": [
-                    {
-                      "Column": {
-                        "Expression": {
-                          "SourceRef": {
-                            "Source": "c"
-                          }
-                        },
-                        "Property": "MesRotulo"
-                      }
-                    }
-                  ],
-                  "Table": {
-                    "SourceRef": {
-                      "Source": "subquery"
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        },
-        "howCreated": "User"
-      },
-      {
-        "name": "31993dc4c278a1ab3268",
-        "field": {
-          "Aggregation": {
-            "Expression": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "olist vw_dim_produtos"
-                  }
-                },
-                "Property": "categoria"
-              }
-            },
-            "Function": 2
+            "Property": "Categorias 100+"
           }
         },
         "type": "Advanced"
