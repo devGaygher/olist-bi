@@ -4,10 +4,10 @@
   "position": {
     "x": 438.80597014925371,
     "y": 174.62686567164178,
-    "z": 7000,
+    "z": 6000,
     "height": 373.43283582089549,
     "width": 402.08955223880594,
-    "tabOrder": 7000
+    "tabOrder": 6000
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -684,20 +684,6 @@
         },
         "type": "Advanced",
         "howCreated": "User"
-      },
-      {
-        "name": "1dbd702b3c82c18bddc8",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Medidas"
-              }
-            },
-            "Property": "Nota Media Categoria 100+"
-          }
-        },
-        "type": "Advanced"
       }
     ],
     "filterSortOrder": "Custom"

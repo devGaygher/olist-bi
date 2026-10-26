@@ -211,23 +211,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "9db5b24ab56fa7134554",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Medidas"
-              }
-            },
-            "Property": "Pedidos"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

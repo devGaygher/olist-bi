@@ -82,7 +82,7 @@ table _Medidas
 			    DISTINCTCOUNT('olist vw_fato_pedidos'[order_id]),'olist vw_fato_pedidos'[nota_review] <> BLANK(),
 			    CROSSFILTER('olist vw_fato_itens'[order_id], 'olist vw_fato_pedidos'[order_id], BOTH)
 			)
-		formatString: 0
+		formatString: 0.000000
 		lineageTag: 5712b4ff-e2c1-4077-9822-2c87405529ba
 
 	measure 'Nota Media Categoria 100+' =
@@ -105,6 +105,64 @@ table _Medidas
 			)
 		formatString: 0
 		lineageTag: 2d900360-40c4-4296-b321-55abd295964d
+
+
+	measure Clientes =
+			
+			CALCULATE(
+			    DISTINCTCOUNT('olist vw_dim_cliente'[customer_unique_id]),
+			    'olist vw_fato_pedidos'[pedido_valido] = 1,
+			    CROSSFILTER('olist vw_dim_cliente'[customer_id], 'olist vw_fato_pedidos'[customer_id], BOTH)
+			)
+		formatString: #,0
+		lineageTag: 2582155b-e409-4244-a03b-b1957126ef05
+
+	measure 'Clientes Recompra' =
+			
+			COUNTROWS(
+			    FILTER(
+			        VALUES('olist vw_dim_cliente'[customer_unique_id]),
+			        CALCULATE(
+			            DISTINCTCOUNT('olist vw_fato_pedidos'[data_compra]),
+			            'olist vw_fato_pedidos'[pedido_valido] = 1
+			        ) >= 2
+			    )
+			)
+		formatString: 0
+		lineageTag: 5c88d74b-d8ef-45fb-8abf-a86ce8466520
+
+	measure '% Recompra' = DIVIDE([Clientes Recompra], [Clientes])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 13f60da3-7424-4416-b969-fe3236b344f0
+
+	measure 'Clientes na Faixa' =
+			
+			VAR faixa = SELECTEDVALUE('Faixa Compra'[Ordem])
+			RETURN
+			COUNTROWS(
+			    FILTER(
+			        VALUES('olist vw_dim_cliente'[customer_unique_id]),
+			        VAR dias =
+			            CALCULATE(
+			                DISTINCTCOUNT('olist vw_fato_pedidos'[data_compra]),
+			                'olist vw_fato_pedidos'[pedido_valido] = 1
+			            )
+			        RETURN IF(faixa = 3, dias >= 3, dias = faixa)
+			    )
+			)
+		formatString: 0
+		lineageTag: 7ef0b8c0-4cb3-45d4-b79c-cb97e4fbea25
+
+	measure '% Clientes na Faixa' = DIVIDE([Clientes na Faixa], [Clientes])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 8abd87ad-d9f5-4431-8b16-a8d15e580538
+
+	measure 'Pedidos por Cliente' = DIVIDE([Pedidos], [Clientes])
+		formatString: #,0.000
+		lineageTag: 7c35f9e4-b80b-4893-af26-6a7bc46a50d4
+
+		ngedProperty = FormatString
+
 
 	partition _Medidas = m
 		mode: import
