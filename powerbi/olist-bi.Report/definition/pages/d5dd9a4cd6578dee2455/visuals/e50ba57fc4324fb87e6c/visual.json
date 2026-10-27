@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "e50ba57fc4324fb87e6c",
   "position": {
-    "x": 23,
-    "y": 440,
+    "x": 24.316109422492403,
+    "y": 427.96352583586628,
     "z": 8000,
     "height": 275,
     "width": 545,
@@ -526,5 +526,51 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "2d56185891cabf9909b6",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "olist vw_fato_pedidos"
+              }
+            },
+            "Property": "Faixa Horario"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "de217673eed6b10b4ece",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Calendario"
+              }
+            },
+            "Property": "DiaSemana"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "314ad7d98c23d955452f",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Pedidos"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "700ab687c6ce8c9fbdf3",
   "position": {
-    "x": 733,
-    "y": 177,
+    "x": 733.37386018237089,
+    "y": 177.02127659574469,
     "z": 7000,
-    "height": 250,
-    "width": 521,
+    "height": 240.24316109422494,
+    "width": 520.36474164133745,
     "tabOrder": 6000
   },
   "visual": {
@@ -436,5 +436,37 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "fbfdbe0471280bd31f8d",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Calendario"
+              }
+            },
+            "Property": "MesRotulo"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "5ca6bf6d1c741e86395b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Ticket Medio"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

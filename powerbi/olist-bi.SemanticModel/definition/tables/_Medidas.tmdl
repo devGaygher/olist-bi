@@ -106,7 +106,6 @@ table _Medidas
 		formatString: 0
 		lineageTag: 2d900360-40c4-4296-b321-55abd295964d
 
-
 	measure Clientes =
 			
 			CALCULATE(
@@ -161,8 +160,7 @@ table _Medidas
 		formatString: #,0.000
 		lineageTag: 7c35f9e4-b80b-4893-af26-6a7bc46a50d4
 
-		ngedProperty = FormatString
-
+		changedProperty = FormatString
 
 	partition _Medidas = m
 		mode: import

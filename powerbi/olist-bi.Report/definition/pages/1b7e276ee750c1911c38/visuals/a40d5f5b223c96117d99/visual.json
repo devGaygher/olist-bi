@@ -5,7 +5,7 @@
     "x": 647.5,
     "y": 177.5,
     "z": 7000,
-    "height": 250,
+    "height": 240,
     "width": 608,
     "tabOrder": 7000
   },
@@ -423,6 +423,20 @@
         },
         "type": "Advanced",
         "howCreated": "User"
+      },
+      {
+        "name": "dbbc5e0952b87a351266",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Receita Acumulada"
+          }
+        },
+        "type": "Advanced"
       }
     ],
     "filterSortOrder": "Custom"

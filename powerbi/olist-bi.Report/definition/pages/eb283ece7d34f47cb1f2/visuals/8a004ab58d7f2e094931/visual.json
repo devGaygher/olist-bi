@@ -204,23 +204,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "1b08f0481e69038b8073",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Medidas"
-              }
-            },
-            "Property": "% Recompra"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }
