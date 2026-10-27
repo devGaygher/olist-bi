@@ -377,51 +377,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "eff482eee21a8c4b65b3",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Calendario"
-              }
-            },
-            "Property": "MesRotulo"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "7fbdf22a9313b8fbe079",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Medidas"
-              }
-            },
-            "Property": "Receita"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "19e7d057ee2e772615f8",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Medidas"
-              }
-            },
-            "Property": "Pedidos"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

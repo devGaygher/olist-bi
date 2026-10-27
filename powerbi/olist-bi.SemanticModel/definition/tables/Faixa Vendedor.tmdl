@@ -1,0 +1,33 @@
+table 'Faixa Vendedor'
+	lineageTag: 7061183b-0854-4d42-968f-73cbe1eccfd6
+
+	column Faixa
+		lineageTag: 28605318-d93f-4f20-9d06-3d9b875c3c0c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Faixa]
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		formatString: 0
+		lineageTag: fa6b7e42-3a5d-4c2c-8ab7-6210a211f0a2
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ordem]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Faixa Vendedor' = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Faixa", STRING,
+				    "Ordem", INTEGER,
+				    { {"Top 10", 1}, {"11 a 100", 2}, {"Demais", 3} }
+				)
+
+	annotation PBI_Id = 5986acd54f31421386837f1a31a12ce2
+

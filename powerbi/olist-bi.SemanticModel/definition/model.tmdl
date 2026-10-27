@@ -27,6 +27,7 @@ ref table LocalDateTable_f4fa01b7-3f93-49df-8f4b-89b927f2dff6
 ref table Calendario
 ref table _Medidas
 ref table 'Faixa Compra'
+ref table 'Faixa Vendedor'
 
 ref cultureInfo pt-BR
 

@@ -565,34 +565,6 @@
         },
         "type": "Categorical",
         "howCreated": "User"
-      },
-      {
-        "name": "3e1f351e37ce65960b74",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Faixa Compra"
-              }
-            },
-            "Property": "Faixa"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "f23d773aca76c71d51db",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Medidas"
-              }
-            },
-            "Property": "% Clientes na Faixa"
-          }
-        },
-        "type": "Advanced"
       }
     ],
     "filterSortOrder": "Custom"

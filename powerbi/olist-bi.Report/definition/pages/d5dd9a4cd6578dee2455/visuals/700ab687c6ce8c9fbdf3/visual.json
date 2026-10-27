@@ -436,37 +436,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "fbfdbe0471280bd31f8d",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Calendario"
-              }
-            },
-            "Property": "MesRotulo"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "5ca6bf6d1c741e86395b",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Medidas"
-              }
-            },
-            "Property": "Ticket Medio"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }
