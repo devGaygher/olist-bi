@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "afb8129aceb5a564fe73",
   "position": {
-    "x": 439,
-    "y": 440,
+    "x": 438.66261398176295,
+    "y": 431.85410334346506,
     "z": 8000,
     "height": 271,
     "width": 402,
@@ -416,6 +416,20 @@
             }
           ]
         }
+      },
+      {
+        "name": "de20f767f9ec7618ee04",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Nota Media"
+          }
+        },
+        "type": "Advanced"
       }
     ]
   }

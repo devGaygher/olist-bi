@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "56c1d859a0fe447a2fdd",
   "position": {
-    "x": 23.75,
-    "y": 177.5,
+    "x": 23.343465045592705,
+    "y": 177.02127659574469,
     "z": 5000,
-    "height": 250,
-    "width": 600,
+    "height": 240,
+    "width": 600.12158054711244,
     "tabOrder": 5000
   },
   "visual": {
@@ -391,5 +391,51 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f9ab85585e7ad4321977",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Calendario"
+              }
+            },
+            "Property": "MesRotulo"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "74c8950799d77244d257",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Receita"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "dcd39f78ba9211fd6f3a",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Pedidos"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }

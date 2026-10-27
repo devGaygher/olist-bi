@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "de5db9b663c74b928137",
   "position": {
-    "x": 577,
-    "y": 440,
+    "x": 575.80547112462011,
+    "y": 427.96352583586628,
     "z": 0,
     "height": 275,
     "width": 435,
@@ -521,6 +521,20 @@
             }
           ]
         }
+      },
+      {
+        "name": "2835845793817880b2fc",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Receita"
+          }
+        },
+        "type": "Advanced"
       }
     ]
   }

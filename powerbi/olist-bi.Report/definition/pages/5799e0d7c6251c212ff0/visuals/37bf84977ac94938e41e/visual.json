@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "37bf84977ac94938e41e",
   "position": {
-    "x": 438.80597014925371,
-    "y": 174.62686567164178,
+    "x": 438.66261398176295,
+    "y": 175.07598784194531,
     "z": 6000,
-    "height": 373.43283582089549,
-    "width": 402.08955223880594,
+    "height": 360.85106382978722,
+    "width": 402.67477203647417,
     "tabOrder": 6000
   },
   "visual": {
@@ -684,6 +684,20 @@
         },
         "type": "Advanced",
         "howCreated": "User"
+      },
+      {
+        "name": "e6fa1a2de16f70a93586",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Nota Media Categoria 100+"
+          }
+        },
+        "type": "Advanced"
       }
     ],
     "filterSortOrder": "Custom"
