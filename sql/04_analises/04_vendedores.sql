@@ -87,3 +87,60 @@ SELECT seller_id, pedidos, receita, pct_postado_no_prazo, pct_atrasado, nota_med
             ELSE 'regular' END AS classificacao
 FROM metricas
 ORDER BY nota_media;
+
+-- 4.4 Totais para os cartoes
+WITH pedido_vendedor AS (
+    SELECT seller_id, order_id, MIN(shipping_limit_date) AS limite_postagem
+    FROM order_items
+    GROUP BY seller_id, order_id
+)
+SELECT COUNT(DISTINCT pv.seller_id) AS vendedores_com_venda,
+       COUNT(*) AS pares_pedido_vendedor,
+       ROUND(100 * AVG(o.order_delivered_carrier_date <= pv.limite_postagem), 1) AS pct_postado_no_prazo
+FROM pedido_vendedor AS pv
+JOIN orders AS o ON o.order_id = pv.order_id
+WHERE o.order_status NOT IN ('canceled', 'unavailable')
+  AND o.order_purchase_timestamp >= '2017-01-01'
+  AND o.order_purchase_timestamp <  '2018-09-01';
+
+-- 4.5 Vendedores por classificacao (so quem tem 30+ pedidos)
+WITH review_unica AS (
+    SELECT order_id, review_score
+    FROM (
+        SELECT order_id, review_score,
+               ROW_NUMBER() OVER (PARTITION BY order_id
+                   ORDER BY review_answer_timestamp DESC, review_creation_date DESC) AS rn
+        FROM order_reviews
+    ) AS x
+    WHERE rn = 1
+),
+pedido_vendedor AS (
+    SELECT seller_id, order_id,
+           MIN(shipping_limit_date) AS limite_postagem,
+           SUM(price) AS receita
+    FROM order_items
+    GROUP BY seller_id, order_id
+),
+metricas AS (
+    SELECT pv.seller_id,
+           SUM(pv.receita) AS receita,
+           100 * AVG(o.order_delivered_customer_date > o.order_estimated_delivery_date) AS pct_atrasado,
+           AVG(r.review_score) AS nota_media
+    FROM pedido_vendedor AS pv
+    JOIN orders AS o ON o.order_id = pv.order_id
+    LEFT JOIN review_unica AS r ON r.order_id = pv.order_id
+    WHERE o.order_status NOT IN ('canceled', 'unavailable')
+      AND o.order_purchase_timestamp >= '2017-01-01'
+      AND o.order_purchase_timestamp <  '2018-09-01'
+    GROUP BY pv.seller_id
+    HAVING COUNT(*) >= 30
+)
+SELECT CASE WHEN ROUND(nota_media, 2) >= 4.3 AND ROUND(pct_atrasado, 1) <= 5 THEN 'bom'
+            WHEN ROUND(nota_media, 2) < 3.5 OR ROUND(pct_atrasado, 1) > 15 THEN 'problema'
+            ELSE 'regular' END AS classificacao,
+       COUNT(*) AS vendedores,
+       ROUND(SUM(receita), 2) AS receita
+FROM metricas
+GROUP BY classificacao
+ORDER BY classificacao;
+

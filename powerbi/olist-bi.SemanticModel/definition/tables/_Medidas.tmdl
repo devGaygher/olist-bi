@@ -162,6 +162,84 @@ table _Medidas
 
 		changedProperty = FormatString
 
+	measure Vendedores = DISTINCTCOUNT('olist vw_fato_itens'[seller_id])
+		lineageTag: 63019e89-f5f3-420d-b1f8-6c62b27a981c
+
+		formatStringDefinition = "#,0"
+
+	measure 'Receita na Faixa' =
+			
+			VAR faixa = SELECTEDVALUE('Faixa Vendedor'[Ordem])
+			VAR vendedores =
+			    FILTER(
+			        ADDCOLUMNS(ALL('olist vw_dim_vendedor'[seller_id]), "@rec", [Receita]),
+			        [@rec] > 0
+			    )
+			VAR top10  = TOPN(10,  vendedores, [@rec], DESC)
+			VAR top100 = TOPN(100, vendedores, [@rec], DESC)
+			RETURN
+			SWITCH(
+			    faixa,
+			    1, SUMX(top10, [@rec]),
+			    2, SUMX(top100, [@rec]) - SUMX(top10, [@rec]),
+			    3, [Receita] - SUMX(top100, [@rec]),
+			    [Receita]
+			)
+		formatString: 0.0
+		lineageTag: 30c22e89-4704-4d03-abb3-5857bfa1cbb4
+
+	measure '% Receita na Faixa' = DIVIDE([Receita na Faixa], [Receita])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 2f7c601c-09d4-4369-b362-df583b2b485c
+
+	measure Medida
+		lineageTag: 724d1a5b-0720-4838-91da-2efc7866baca
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure '% Receita Top 10' = CALCULATE([% Receita na Faixa], 'Faixa Vendedor'[Ordem] = 1)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: abff9f87-7f83-4f3c-b433-ca71d855038b
+
+	measure '% Postado no Prazo' =
+			
+			VAR pares =
+			    ADDCOLUMNS(
+			        SUMMARIZE('olist vw_fato_itens', 'olist vw_fato_itens'[seller_id], 'olist vw_fato_itens'[order_id]),
+			        "@limite", CALCULATE(MIN('olist vw_fato_itens'[data_limite_postagem])),
+			        "@postagem", CALCULATE(MAX('olist vw_fato_itens'[data_postagem]))
+			    )
+			VAR com_postagem = FILTER(pares, NOT ISBLANK([@postagem]))
+			RETURN
+			DIVIDE(COUNTROWS(FILTER(com_postagem, [@postagem] <= [@limite])), COUNTROWS(com_postagem))
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 64524039-6cef-45c1-9fe5-1d8cb73de24b
+
+	measure '% Atrasado' =
+			
+			VAR no_prazo =
+			    CALCULATE(
+			        AVERAGE('olist vw_fato_pedidos'[entregue_no_prazo]),
+			        CROSSFILTER('olist vw_fato_itens'[order_id], 'olist vw_fato_pedidos'[order_id], BOTH)
+			    )
+			RETURN IF(ISBLANK(no_prazo), BLANK(), 1 - no_prazo)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 696cd7df-efa3-4aff-b5f8-966243111700
+
+	measure 'Nota Vendedor' =
+			
+			CALCULATE(
+			    AVERAGE('olist vw_fato_pedidos'[nota_review]),
+			    CROSSFILTER('olist vw_fato_itens'[order_id], 'olist vw_fato_pedidos'[order_id], BOTH)
+			)
+		lineageTag: 21e224b0-18a2-4e0e-873d-a5e1f3c0bc90
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Pedidos 30+' = VAR p = [Pedidos] RETURN IF(p >= 30, p)
+		formatString: 0
+		lineageTag: bbb19604-c20d-4384-b253-c3a1eb281aaa
+
 	partition _Medidas = m
 		mode: import
 		source =

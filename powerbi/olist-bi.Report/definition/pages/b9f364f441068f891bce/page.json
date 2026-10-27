@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "b9f364f441068f891bce",
+  "displayName": "Vendedores",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "pageBinding": {
+    "name": "1b9f2bae2e4780683a6e",
+    "type": "Default",
+    "parameters": [],
+    "acceptsFilterContext": "None"
+  },
+  "visualInteractions": [
+    {
+      "source": "0ef1e3c2ad8b56fdd98b",
+      "target": "daedcb56b44606823e10",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0ef1e3c2ad8b56fdd98b",
+      "target": "8c60de9bd16f26d1b1a9",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0ef1e3c2ad8b56fdd98b",
+      "target": "e59e291a7ba2dd38627b",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0ef1e3c2ad8b56fdd98b",
+      "target": "4362a9b95f5f40f1c251",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0ef1e3c2ad8b56fdd98b",
+      "target": "5cbb072e03916be67fad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "5cbb072e03916be67fad",
+      "target": "e59e291a7ba2dd38627b",
+      "type": "NoFilter"
+    },
+    {
+      "source": "5cbb072e03916be67fad",
+      "target": "4362a9b95f5f40f1c251",
+      "type": "NoFilter"
+    },
+    {
+      "source": "5cbb072e03916be67fad",
+      "target": "daedcb56b44606823e10",
+      "type": "NoFilter"
+    },
+    {
+      "source": "5cbb072e03916be67fad",
+      "target": "0ef1e3c2ad8b56fdd98b",
+      "type": "NoFilter"
+    },
+    {
+      "source": "5cbb072e03916be67fad",
+      "target": "8c60de9bd16f26d1b1a9",
+      "type": "NoFilter"
+    }
+  ]
+}

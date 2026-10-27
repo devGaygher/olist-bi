@@ -416,20 +416,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "de20f767f9ec7618ee04",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Medidas"
-              }
-            },
-            "Property": "Nota Media"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }
