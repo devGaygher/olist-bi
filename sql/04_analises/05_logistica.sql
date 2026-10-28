@@ -9,17 +9,6 @@ WHERE order_status NOT IN ('canceled', 'unavailable')
   AND order_purchase_timestamp <  '2018-09-01';
 
 
--- 5.1 Resumo do período
-SELECT COUNT(*) AS pedidos_entregues,
-    ROUND(100 * AVG(order_delivered_customer_date <= order_estimated_delivery_date), 1) AS pct_no_prazo,
-    ROUND(AVG(DATEDIFF(order_delivered_customer_date, order_purchase_timestamp)), 1) AS dias_ate_entrega
-FROM orders
-WHERE order_status NOT IN ('canceled', 'unavailable')
-  AND order_delivered_customer_date IS NOT NULL
-  AND order_purchase_timestamp >= '2017-01-01'
-  AND order_purchase_timestamp <  '2018-09-01';
-
-
 -- 5.2 Evolução mensal
 SELECT DATE_FORMAT(order_purchase_timestamp, '%Y-%m') AS mes,
     COUNT(*) AS pedidos_entregues,
@@ -32,32 +21,6 @@ WHERE order_status NOT IN ('canceled', 'unavailable')
   AND order_purchase_timestamp <  '2018-09-01'
 GROUP BY mes
 ORDER BY mes;
-
--- 5.1 Resumo do período
-SELECT COUNT(*) AS pedidos_entregues,
-       ROUND(100 * AVG(order_delivered_customer_date <= order_estimated_delivery_date), 1) AS pct_no_prazo,
-       ROUND(AVG(DATEDIFF(order_delivered_customer_date, order_purchase_timestamp)), 1) AS dias_ate_entrega
-FROM orders
-WHERE order_status NOT IN ('canceled', 'unavailable')
-  AND order_delivered_customer_date IS NOT NULL
-  AND order_purchase_timestamp >= '2017-01-01'
-  AND order_purchase_timestamp <  '2018-09-01';
-
-
--- 5.2 Evolução mensal
-SELECT DATE_FORMAT(order_purchase_timestamp, '%Y-%m') AS mes,
-       COUNT(*) AS pedidos_entregues,
-       ROUND(100 * AVG(order_delivered_customer_date <= order_estimated_delivery_date), 1) AS pct_no_prazo,
-       ROUND(AVG(DATEDIFF(order_delivered_customer_date, order_purchase_timestamp)), 1) AS dias_ate_entrega
-FROM orders
-WHERE order_status NOT IN ('canceled', 'unavailable')
-  AND order_delivered_customer_date IS NOT NULL
-  AND order_purchase_timestamp >= '2017-01-01'
-  AND order_purchase_timestamp <  '2018-09-01'
-GROUP BY mes
-ORDER BY mes;
-
-
 -- 5.3 Entrega e frete por estado (duas CTEs, uma por grão)
 WITH entrega AS (
     SELECT c.customer_state AS estado,
@@ -88,3 +51,50 @@ FROM entrega AS e
 JOIN frete AS f ON f.estado = e.estado
 ORDER BY e.dias_ate_entrega DESC;
 
+-- 5.4 Atraso médio dos pedidos entregues com atraso
+SELECT COUNT(*) AS pedidos_atrasados,
+       ROUND(AVG(DATEDIFF(order_delivered_customer_date, order_estimated_delivery_date)), 2) AS atraso_medio_dias
+FROM orders
+WHERE order_status NOT IN ('canceled', 'unavailable')
+  AND order_delivered_customer_date IS NOT NULL
+  AND order_delivered_customer_date > order_estimated_delivery_date
+  AND order_purchase_timestamp >= '2017-01-01'
+  AND order_purchase_timestamp <  '2018-09-01';
+
+-- 5.5 Peso do frete no período inteiro
+SELECT ROUND(100 * SUM(oi.freight_value) / SUM(oi.price), 1) AS frete_pct_do_valor
+FROM order_items AS oi
+JOIN orders AS o ON o.order_id = oi.order_id
+WHERE o.order_status NOT IN ('canceled', 'unavailable')
+  AND o.order_purchase_timestamp >= '2017-01-01'
+  AND o.order_purchase_timestamp <  '2018-09-01';
+
+-- 5.6 Entrega por região do cliente
+SELECT CASE
+           WHEN c.customer_state IN ('AC','AP','AM','PA','RO','RR','TO') THEN 'Norte'
+           WHEN c.customer_state IN ('AL','BA','CE','MA','PB','PE','PI','RN','SE') THEN 'Nordeste'
+           WHEN c.customer_state IN ('DF','GO','MT','MS') THEN 'Centro-Oeste'
+           WHEN c.customer_state IN ('ES','MG','RJ','SP') THEN 'Sudeste'
+           WHEN c.customer_state IN ('PR','RS','SC') THEN 'Sul'
+       END AS regiao,
+       COUNT(*) AS pedidos_entregues,
+       ROUND(AVG(DATEDIFF(o.order_delivered_customer_date, o.order_purchase_timestamp)), 1) AS dias_ate_entrega,
+       ROUND(100 * AVG(o.order_delivered_customer_date <= o.order_estimated_delivery_date), 1) AS pct_no_prazo
+FROM orders AS o
+JOIN customers AS c ON c.customer_id = o.customer_id
+WHERE o.order_status NOT IN ('canceled', 'unavailable')
+  AND o.order_delivered_customer_date IS NOT NULL
+  AND o.order_purchase_timestamp >= '2017-01-01'
+  AND o.order_purchase_timestamp <  '2018-09-01'
+GROUP BY regiao
+ORDER BY pct_no_prazo;
+
+-- 5.7 Atrasos no próprio dia prometido (a data prometida não tem horário)
+SELECT COUNT(*) AS pedidos_atrasados,
+       SUM(DATEDIFF(order_delivered_customer_date, order_estimated_delivery_date) = 0) AS atraso_no_dia_prometido,
+       SUM(DATEDIFF(order_delivered_customer_date, order_estimated_delivery_date) > 0) AS atraso_1_dia_ou_mais
+FROM orders
+WHERE order_status NOT IN ('canceled', 'unavailable')
+  AND order_delivered_customer_date > order_estimated_delivery_date
+  AND order_purchase_timestamp >= '2017-01-01'
+  AND order_purchase_timestamp <  '2018-09-01';

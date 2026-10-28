@@ -190,23 +190,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "5edf7cd3a6d4c32a342b",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Medidas"
-              }
-            },
-            "Property": "Vendedores"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }
