@@ -33,6 +33,21 @@ table 'olist vw_dim_cliente'
 
 		annotation SummarizationSetBy = Automatic
 
+	column Regiao =
+			
+			SWITCH(
+			    TRUE(),
+			    'olist vw_dim_cliente'[estado] IN {"AC","AP","AM","PA","RO","RR","TO"}, "Norte",
+			    'olist vw_dim_cliente'[estado] IN {"AL","BA","CE","MA","PB","PE","PI","RN","SE"}, "Nordeste",
+			    'olist vw_dim_cliente'[estado] IN {"DF","GO","MT","MS"}, "Centro-Oeste",
+			    'olist vw_dim_cliente'[estado] IN {"ES","MG","RJ","SP"}, "Sudeste",
+			    'olist vw_dim_cliente'[estado] IN {"PR","RS","SC"}, "Sul"
+			)
+		lineageTag: 338c5e85-193f-4b72-b757-3b363ec44e3c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
 	partition 'olist vw_dim_cliente' = m
 		mode: import
 		source =

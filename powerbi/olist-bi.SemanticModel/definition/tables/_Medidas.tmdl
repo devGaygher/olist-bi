@@ -55,10 +55,12 @@ table _Medidas
 
 	measure 'Atraso Medio' =
 			
-			CALCULATE( AVERAGE('olist vw_fato_pedidos'[dias_atraso]), 'olist vw_fato_pedidos'[dias_atraso] > 0)
+			CALCULATE(
+			    AVERAGE('olist vw_fato_pedidos'[dias_atraso]),
+			    'olist vw_fato_pedidos'[entregue_no_prazo] = 0
+			)
+		formatString: 0.00
 		lineageTag: a8df44ca-a2b4-4e52-bf13-ef77d8cb6a54
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Nota Media' = average('olist vw_fato_pedidos'[nota_review])
 		formatString: 0.00
@@ -239,6 +241,13 @@ table _Medidas
 	measure 'Pedidos 30+' = VAR p = [Pedidos] RETURN IF(p >= 30, p)
 		formatString: 0
 		lineageTag: bbb19604-c20d-4384-b253-c3a1eb281aaa
+
+	measure 'Frete % do Valor' = ```
+			
+			    DIVIDE(SUM('olist vw_fato_itens'[frete]), SUM('olist vw_fato_itens'[preco]))
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 7858d969-9978-4718-abc8-990d10ee64a9
 
 	partition _Medidas = m
 		mode: import
