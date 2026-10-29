@@ -5,6 +5,7 @@
 -- * pedido valido: status fora de 'canceled' e 'unavailable'
 -- * 1 review por pedido (mais recente)
 -- * pagamentos de valor zero ficam fora
+-- * requer categoria_ptbr: rodar 05a_categorias_ptbr.sql ANTES deste script
 -- script reexecutavel (create or replace view)
 
 USE olist;
@@ -41,10 +42,10 @@ CREATE OR REPLACE VIEW vw_dim_vendedor AS
 CREATE OR REPLACE VIEW vw_dim_produtos AS
     SELECT
         p.product_id,
-        COALESCE(t.product_category_name_english, p.product_category_name, 'sem_categoria') AS categoria
+        COALESCE(c.categoria, 'sem_categoria') AS categoria
     FROM products p
     LEFT JOIN product_category_name_translation t
-        ON t.product_category_name = p.product_category_name;
+        ON c.product_category_name = p.product_category_name;
 
 -- calendario: criado no POWER BI a partir de data_compra
 
@@ -214,4 +215,11 @@ SELECT
      FROM vw_fato_pagamentos g
      LEFT JOIN vw_fato_pedidos p ON p.order_id = g.order_id
      WHERE p.order_id IS NULL) AS pagamentos_sem_pedido;
+
+-- categorias em português: 32.951 produtos, 74 categorias (73 + 'Sem categoria'), 610 sem categoria
+SELECT
+    COUNT(*) AS produtos,
+    COUNT(DISTINCT categoria) AS categorias,
+    SUM(categoria = 'Sem categoria') AS sem_categoria
+FROM vw_dim_produtos;
 
