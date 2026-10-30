@@ -109,10 +109,10 @@ table 'olist vw_fato_pedidos'
 		dataType: int64
 		formatString: 0
 		lineageTag: c0b4911d-ff9f-415f-9805-d610f3f78e52
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: nota_review
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 	column dias_atraso
 		dataType: int64
@@ -155,6 +155,42 @@ table 'olist vw_fato_pedidos'
 			    SWITCH( TRUE(), h<6,1,h<12,2,h<18,3,4)
 		formatString: 0
 		lineageTag: 01154ad4-3cc2-47a7-91a8-af84cc7a741d
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa Atraso' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([entregue_no_prazo]), BLANK(),
+			    [entregue_no_prazo] = 1, "No prazo",
+			    [dias_atraso] <= 3, "Até 3 dias",
+			    [dias_atraso] <= 7, "De 4 a 7 dias",
+			    [dias_atraso] <= 14, "De 8 a 14 dias",
+			    "Mais de 14 dias"
+			)
+		lineageTag: 033ec13a-2f32-40cb-8375-9ba6b3de7d14
+		summarizeBy: none
+		sortByColumn: 'Faixa Atraso Ordem'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Faixa Atraso Ordem' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([entregue_no_prazo]), BLANK(),
+			    [entregue_no_prazo] = 1, 1,
+			    [dias_atraso] <= 3, 2,
+			    [dias_atraso] <= 7, 3,
+			    [dias_atraso] <= 14, 4,
+			    5
+			)
+		formatString: 0
+		lineageTag: f6ac59ec-8081-4be5-ae3a-989f156bd208
 		summarizeBy: sum
 
 		annotation SummarizationSetBy = Automatic

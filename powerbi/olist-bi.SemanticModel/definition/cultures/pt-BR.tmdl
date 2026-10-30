@@ -6028,22 +6028,6 @@ cultureInfo pt-BR
 			        }
 			      ]
 			    },
-			    "entity__medida.medida": {
-			      "Definition": {
-			        "Binding": {
-			          "ConceptualEntity": "_Medidas",
-			          "ConceptualProperty": "Medida"
-			        }
-			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "medida": {
-			            "State": "Generated"
-			          }
-			        }
-			      ]
-			    },
 			    "entity__medida.receita_top_10": {
 			      "Definition": {
 			        "Binding": {
