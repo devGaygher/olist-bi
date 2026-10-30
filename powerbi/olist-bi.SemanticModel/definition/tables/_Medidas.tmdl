@@ -8,7 +8,7 @@ table _Medidas
 		annotation PBI_FormatHint = {"currencyCulture":"kgp-Latn-BR"}
 
 	measure Pedidos = DISTINCTCOUNT( 'olist vw_fato_itens'[order_id] )
-		formatString: #,0
+		formatString: #,0.00
 		lineageTag: eef8880b-91fd-42fc-83e5-6e960d8782f5
 
 	measure 'Ticket Medio' = DIVIDE( [Receita], [Pedidos])
@@ -84,8 +84,9 @@ table _Medidas
 			    DISTINCTCOUNT('olist vw_fato_pedidos'[order_id]),'olist vw_fato_pedidos'[nota_review] <> BLANK(),
 			    CROSSFILTER('olist vw_fato_itens'[order_id], 'olist vw_fato_pedidos'[order_id], BOTH)
 			)
-		formatString: 0.000000
 		lineageTag: 5712b4ff-e2c1-4077-9822-2c87405529ba
+
+		formatStringDefinition = "#.0"
 
 	measure 'Nota Media Categoria 100+' =
 			
@@ -194,11 +195,6 @@ table _Medidas
 		formatString: 0.00%;-0.00%;0.00%
 		lineageTag: 2f7c601c-09d4-4369-b362-df583b2b485c
 
-	measure Medida
-		lineageTag: 724d1a5b-0720-4838-91da-2efc7866baca
-
-		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
-
 	measure '% Receita Top 10' = CALCULATE([% Receita na Faixa], 'Faixa Vendedor'[Ordem] = 1)
 		formatString: 0.00%;-0.00%;0.00%
 		lineageTag: abff9f87-7f83-4f3c-b433-ca71d855038b
@@ -248,6 +244,21 @@ table _Medidas
 			```
 		formatString: 0.00%;-0.00%;0.00%
 		lineageTag: 7858d969-9978-4718-abc8-990d10ee64a9
+
+	measure '% Nota Baixa' =
+			
+			DIVIDE(
+			    CALCULATE([Pedidos], 'olist vw_fato_pedidos'[nota_review] IN {1, 2}),
+			    CALCULATE([Pedidos], 'olist vw_fato_pedidos'[nota_review] <> BLANK())
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 741be682-1f2f-40dd-b1fd-fbd2e5f03129
+
+	measure 'Pedidos Sem Avaliacao' =
+			
+			CALCULATE([Pedidos], 'olist vw_fato_pedidos'[nota_review] = BLANK())
+		formatString: 0
+		lineageTag: 87ea0bde-1f63-40fb-88f7-7a063a0bb2e2
 
 	partition _Medidas = m
 		mode: import

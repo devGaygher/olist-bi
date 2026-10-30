@@ -1,16 +1,16 @@
 -- 2.1 Top 10 categorias por receita
-SELECT COALESCE(t.product_category_name_english,p.product_category_name, 'sem_categoria') AS categoria,
+SELECT COALESCE(c.categoria, 'sem_categoria') AS categoria,
 COUNT(*) AS itens_vendidos,
 COUNT(DISTINCT oi.order_id) As pedidos,
 SUM(oi.price) AS receita
 FROM order_items oi
 JOIN orders AS o ON o.order_id = oi.order_id
 JOIN products AS p ON p.product_id = oi.product_id
-LEFT JOIN product_category_name_translation as t ON t.product_category_name = p.product_category_name
+LEFT JOIN categoria_ptbr as c ON c.product_category_name = p.product_category_name
 WHERE o.order_status NOT IN ('canceled','unavailable')
    AND o.order_purchase_timestamp >= '2017-01-01'
   AND o.order_purchase_timestamp <  '2018-09-01'
-GROUP BY categoria
+GROUP BY COALESCE(c.categoria, 'sem_categoria')
 ORDER BY receita DESC
 LIMIT 10;
 
@@ -26,11 +26,11 @@ WITH review_unica AS (
 ),
 pedido_categoria AS ( 
     SELECT DISTINCT oi.order_id,
-        COALESCE(t.product_category_name_english, p.product_category_name, 'sem_categoria') AS categoria
+        COALESCE(c.categoria, 'Sem categoria') AS categoria
     FROM order_items AS oi
     JOIN orders AS o ON o.order_id = oi.order_id
     JOIN products AS p ON p.product_id = oi.product_id
-    LEFT JOIN product_category_name_translation AS t ON t.product_category_name = p.product_category_name
+    LEFT JOIN categoria_ptbr AS c ON c.product_category_name  = p.product_category_name
     WHERE o.order_status NOT IN ('canceled', 'unavailable')
       AND o.order_purchase_timestamp >= '2017-01-01'
       AND o.order_purchase_timestamp <  '2018-09-01'
