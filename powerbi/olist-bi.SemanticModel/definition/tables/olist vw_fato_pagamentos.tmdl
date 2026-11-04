@@ -46,6 +46,21 @@ table 'olist vw_fato_pagamentos'
 
 		annotation PBI_FormatHint = {"currencyCulture":"kgp-Latn-BR"}
 
+	column 'Forma Pagamento PT' =
+			
+			SWITCH(
+			    [forma_pagamento],
+			    "credit_card", "Crédito",
+			    "boleto", "Boleto",
+			    "voucher", "Voucher",
+			    "debit_card", "Débito",
+			    [forma_pagamento]
+			)
+		lineageTag: 4e02c67b-e270-4c0f-914e-d60e152efd46
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
 	partition 'olist vw_fato_pagamentos' = m
 		mode: import
 		source =

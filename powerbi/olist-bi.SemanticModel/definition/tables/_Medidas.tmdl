@@ -260,6 +260,100 @@ table _Medidas
 		formatString: 0
 		lineageTag: 87ea0bde-1f63-40fb-88f7-7a063a0bb2e2
 
+	measure 'Pedidos no Periodo' = COUNTROWS('olist vw_fato_pedidos')
+		formatString: 0
+		lineageTag: dde48599-d6f3-44c9-bd1d-854a9e8b980f
+
+	measure 'Pedidos Perdidos' =
+			
+			CALCULATE(
+			    COUNTROWS('olist vw_fato_pedidos'),
+			    'olist vw_fato_pedidos'[pedido_valido] = 0
+			)
+		formatString: 0
+		lineageTag: 78f9cade-3e73-42be-8010-5984b195a862
+
+	measure '% Perdidos 100+' =
+			
+			VAR p = [Pedidos no Periodo]
+			RETURN IF(p >= 100, [% Pedidos Perdidos])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 2e35bb4a-b2b4-4a62-b3fa-a3f062aabc85
+
+	measure '% Perdidos Geral' =
+			
+			CALCULATE([% Pedidos Perdidos], REMOVEFILTERS('olist vw_dim_cliente'))
+		lineageTag: 0a5e3aed-146c-4c70-858b-36784db54861
+
+	measure 'Pagamentos Cartao' =
+			
+			CALCULATE(
+			    COUNTROWS('olist vw_fato_pagamentos'),
+			    'olist vw_fato_pagamentos'[forma_pagamento] = "credit_card",
+			    KEEPFILTERS('olist vw_fato_pagamentos'[parcelas] > 0)
+			)
+		formatString: 0
+		lineageTag: a0561745-cce3-446e-92be-6d8ce65e6c37
+
+	measure 'Pagamentos Cartao Total' =
+			
+			CALCULATE([Pagamentos Cartao], REMOVEFILTERS('olist vw_fato_pagamentos'[parcelas]))
+		formatString: 0
+		lineageTag: 510030df-7967-446e-9076-c8de4f2eb020
+
+	measure '% Pedidos Perdidos' = DIVIDE([Pedidos Perdidos], [Pedidos no Periodo])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 4576194c-1a6b-442d-a7c7-68c838b4b895
+
+	measure 'Pagamentos Parcelados' =
+			
+			CALCULATE([Pagamentos Cartao], 'olist vw_fato_pagamentos'[parcelas] > 1)
+		formatString: 0
+		lineageTag: 61765306-ca1d-4f89-8884-99f1c1f7c456
+
+	measure '% Parcelado' = DIVIDE([Pagamentos Parcelados], [Pagamentos Cartao Total])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 7bf768ed-6d44-4874-8f20-81ad4792f3d5
+
+	measure 'Media Parcelas Cartao' =
+			
+			CALCULATE(
+			    AVERAGE('olist vw_fato_pagamentos'[parcelas]),
+			    'olist vw_fato_pagamentos'[forma_pagamento] = "credit_card",
+			    'olist vw_fato_pagamentos'[parcelas] > 0
+			)
+		lineageTag: f9f60ced-6112-402b-a82c-beff77b876ac
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Pagamentos por Parcela' = DIVIDE([Pagamentos Cartao], [Pagamentos Cartao Total])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 380601b7-2dda-4ff0-a9c6-165274a50388
+
+	measure '% Pedidos por Forma' =
+			
+			DIVIDE(
+			    DISTINCTCOUNT('olist vw_fato_pagamentos'[order_id]),
+			    CALCULATE(
+			        DISTINCTCOUNT('olist vw_fato_pagamentos'[order_id]),
+			        REMOVEFILTERS('olist vw_fato_pagamentos'[Forma Pagamento PT])
+			    )
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 09d218e0-38a8-4d28-89f2-1098f5dcce93
+
+	measure '% Valor por Forma' =
+			
+			DIVIDE(
+			    SUM('olist vw_fato_pagamentos'[valor]),
+			    CALCULATE(
+			        SUM('olist vw_fato_pagamentos'[valor]),
+			        REMOVEFILTERS('olist vw_fato_pagamentos'[Forma Pagamento PT])
+			    )
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: e433c2c1-340e-439c-a6d9-b20a566af15f
+
 	partition _Medidas = m
 		mode: import
 		source =

@@ -19,7 +19,10 @@
               {
                 "textRuns": [
                   {
-                    "value": " Como ler esta página"
+                    "value": " Como ler esta página",
+                    "textStyle": {
+                      "fontWeight": "bold"
+                    }
                   }
                 ]
               },

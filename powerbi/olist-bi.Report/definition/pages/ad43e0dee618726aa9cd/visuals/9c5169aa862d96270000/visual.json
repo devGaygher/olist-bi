@@ -689,20 +689,6 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "abdcae1ca2c680b6b6cb",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Medidas"
-              }
-            },
-            "Property": "Nota Media"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
         "name": "3718f7f48e709e530477",
         "field": {
           "Column": {
