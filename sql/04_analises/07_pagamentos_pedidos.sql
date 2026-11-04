@@ -68,3 +68,14 @@ GROUP BY estado
 HAVING COUNT(*) >= 100
 ORDER BY pct_perdidos DESC;
 
+-- 7.6 Média de parcelas do cartão de crédito (por pagamento, sem 0 parcelas)
+SELECT ROUND(AVG(p.payment_installments), 2) AS media_parcelas,
+       COUNT(*) AS pagamentos
+FROM order_payments AS p
+JOIN orders AS o ON o.order_id = p.order_id
+WHERE o.order_status NOT IN ('canceled', 'unavailable')
+  AND o.order_purchase_timestamp >= '2017-01-01'
+  AND o.order_purchase_timestamp <  '2018-09-01'
+  AND p.payment_value > 0
+  AND p.payment_type = 'credit_card'
+  AND p.payment_installments > 0;

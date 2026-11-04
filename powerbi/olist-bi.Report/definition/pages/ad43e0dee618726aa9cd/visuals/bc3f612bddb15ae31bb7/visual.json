@@ -204,23 +204,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "52f980726a087406483d",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "_Medidas"
-              }
-            },
-            "Property": "Pedidos Sem Avaliacao"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }
