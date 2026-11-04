@@ -106,7 +106,7 @@ git log --oneline
 2. Conectei a pasta local ao repositório remoto e enviei o projeto:
 
 ```powershell
-git remote add origin https://github.com/SEU_USUARIO/olist-bi.git
+git remote add origin https://github.com/devGaygher/olist-bi.git
 git remote -v
 git push -u origin main
 ```
@@ -124,6 +124,29 @@ git push -u origin main
 | `git log --online` não funcionou | Erro de digitação, o correto é `--oneline` | Conferir a grafia das opções dos comandos |
 | Ramo padrão global configurado como `master` | Configuração antiga do Git | Usar `git init -b main` garante o nome certo no repositório |
 
+## Branches, Pull Requests e recuperação (outubro e novembro/2026)
+
+Depois da estrutura inicial passei a trabalhar com uma branch por assunto (`feature/...`, `fix/...`, `docs/...`), commits no padrão `tipo(escopo): resumo`, Pull Request e merge na `main`. O fluxo de cada etapa:
+
+```
+git switch main  ->  git pull  ->  git fetch --prune  ->  git switch -c feature/nome
+trabalho  ->  git add caminho  ->  git diff --cached --stat  ->  git commit -m "..."
+git push -u origin feature/nome  ->  Pull Request  ->  merge
+git switch main  ->  git pull  ->  git branch -d feature/nome
+```
+
+O projeto do Power BI foi versionado no formato PBIP, que guarda o painel em arquivos de texto. O cache e as configurações locais (`cache.abf`, `localSettings.json`) ficam fora do Git.
+
+### Situações que apareceram e o que aprendi
+
+| Situação | Causa | O que fiz | Aprendizado |
+|---|---|---|---|
+| Commit feito na `main` por engano, antes do push | Não conferi a branch antes de editar | Guardei o commit em uma branch nova (`git branch feature/nome`), devolvi a `main` ao estado do GitHub (`git reset --hard origin/main`) e mudei para a branch nova | Rodar `git branch --show-current` antes do primeiro commit. O `reset --hard` só é seguro sem alterações pendentes e com o commit guardado em outra branch |
+| `git status -sb` com `[ahead 1]` depois de um "push" | O envio anterior não tinha terminado | Rodei `git push -u origin feature/nome` de novo e conferi a linha com os dois códigos de commit (`a5c7617..79e53cb`) | `ahead` mostra commits locais que o GitHub ainda não tem; conferir isso antes de procurar o botão do PR |
+| O botão "Compare & pull request" não apareceu | O aviso some depois de um tempo | Abri o PR em Pull requests > New pull request, ou pelo endereço `compare/main...nome-da-branch` | O PR não depende do aviso amarelo |
+| PR da página Clientes com conflito em `pages.json` e `_Medidas.tmdl` (26/10) | A `main` mudou os mesmos arquivos | Merge da `main` na branch, resolvendo os dois arquivos, e novo push | Conflito é dois lados mudando o mesmo trecho; branches curtas reduzem o problema |
+| Risco de levar arquivo que não é do projeto (cache do Power BI, arquivo pessoal) | `git add .` e `git add -A` pegam tudo | Preparar por caminho e conferir com `git diff --cached --stat` antes do commit | Ver o que vai entrar antes de commitar; o arquivo pessoal de retomada fica fora do repositório |
+
 ## Comandos de referência
 
 | Comando | Para que serve |
@@ -135,10 +158,18 @@ git push -u origin main
 | `git log --oneline` | Ver o histórico resumido |
 | `git remote add origin URL` | Ligar a pasta local ao GitHub |
 | `git push -u origin main` | Enviar commits ao GitHub (primeira vez) |
+| `git branch --show-current` | Mostrar em qual branch estou |
+| `git switch -c nome` | Criar uma branch e mudar para ela |
+| `git switch nome` | Mudar de branch |
+| `git status -sb` | Estado resumido, com a branch e quantos commits ainda não foram enviados (`ahead`) |
+| `git add caminho` | Preparar só os arquivos escolhidos |
+| `git diff --cached --stat` | Conferir o que vai entrar no commit |
+| `git push -u origin nome` | Enviar uma branch nova ao GitHub |
+| `git fetch --prune` | Atualizar a lista de branches remotas e tirar as apagadas |
+| `git branch -d nome` | Apagar uma branch local já mesclada |
+| `git reset --hard origin/main` | Fazer a `main` local voltar ao estado do GitHub (descarta commits locais; só com tudo guardado em outra branch) |
 
 ## Próximos passos
 
-- Trabalhar com **branches**: uma branch por etapa do projeto (por exemplo, `feature/sql-schema`).
-- Abrir e aprovar **Pull Requests** no GitHub e fazer o merge na `main`.
-- Praticar resolução de **conflitos** e recuperação de alterações com `git revert`, `git restore` e `git reflog`.
-- Versionar o projeto do Power BI no formato **PBIP**, que salva em texto e funciona bem com Git.
+- Praticar `git revert`, `git restore` e `git reflog`, para recuperar alterações sem reescrever o histórico.
+- Treinar a resolução de conflitos em situações novas, além do `pages.json` e do `_Medidas.tmdl`.

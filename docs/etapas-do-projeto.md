@@ -2,7 +2,7 @@
 
 Projeto de portfólio (simulação). A empresa, as pessoas e o cenário são fictícios;
 os dados são os do dataset público *Brazilian E-Commerce Public Dataset by Olist*
-(Kaggle). Última atualização: 28/10/2026. Prazo da simulação: 06/11/2026 (prorrogado; o prazo original era 28/10/2026).
+(Kaggle). Última atualização: 04/11/2026. Prazo da simulação: 06/11/2026 (prorrogado; o prazo original era 28/10/2026).
 
 ## Situação geral
 
@@ -24,8 +24,10 @@ os dados são os do dataset público *Brazilian E-Commerce Public Dataset by Oli
 
 **Fases concluídas: preparação (etapas 1 a 7), análises (etapa 8) e views para o BI
 (etapa 9).** Em andamento: modelo estrela e painel no Power BI (etapa 10); o modelo, as
-medidas e 6 das 8 páginas (Visão executiva, Vendas, Produtos, Clientes, Vendedores e
-Logística) estão prontos; faltam Satisfação e Pagamentos e pedidos.
+medidas e as 8 páginas (Visão executiva, Vendas, Produtos, Clientes, Vendedores,
+Logística, Satisfação e Pagamentos e pedidos) estão montados; faltam o acabamento da
+página Pagamentos e pedidos e as conferências abertas da Vendas. Em seguida vêm o dicionário
+de dados (etapa 11), o relatório de 1 página e o README (etapa 12).
 
 ---
 
@@ -127,8 +129,11 @@ Logística) estão prontos; faltam Satisfação e Pagamentos e pedidos.
   `COUNT(DISTINCT order_id)` e 1 review por pedido. Cada consulta declara as
   próprias CTEs, porque uma CTE vale só para a instrução em que foi escrita.
 - Os 7 arquivos rodam sem erro. Números de referência do período (consultas 1.1 e
-  1.2): **97.905 pedidos e R$ 13.449.529,68 de receita**. Os valores das demais
-  consultas ainda precisam de conferência (somas de percentuais e contagens).
+  1.2): **97.905 pedidos e R$ 13.449.529,68 de receita**. As consultas de
+  satisfação (6.1 a 6.6) e de pagamentos e pedidos (7.1 a 7.6) tiveram as somas conferidas
+  entre si em 04/11 (97.178 avaliados nas 6.3, 6.4 e 6.6; 96.203 entregues nas 6.1 e 6.5;
+  99.092 pedidos nas 7.3 e 7.4; 75.674 pagamentos de cartão nas 7.2 e 7.6). Os valores das
+  demais consultas ainda precisam de conferência (somas de percentuais e contagens).
 
 ### 9. Views para o BI
 As views ficam no MySQL e são consumidas pelo Power BI na etapa 10. As regras das
@@ -188,7 +193,7 @@ marcado como tabela de datas.
 Atraso Medio e Nota Media. Da página Produtos: Pedidos Avaliados, Nota Media Categoria,
 Nota Media Categoria 100+ e Categorias 100+. Da página Clientes: Clientes, Clientes Recompra,
 % Recompra, Clientes na Faixa, % Clientes na Faixa e Pedidos por Cliente (mais a tabela
-auxiliar `Faixa Compra`, sem relacionamento). Da página Vendedores: medidas de faixa de receita, % postado no prazo, % atrasado, nota por vendedor e piso de 30 pedidos. Da página Logística: Frete % do Valor e a coluna calculada `Regiao` em `vw_dim_cliente`; `Atraso Medio` é a média de `dias_atraso` dos pedidos com `entregue_no_prazo` = 0. A comparação de crescimento usa sempre jan-ago nos dois
+auxiliar `Faixa Compra`, sem relacionamento). Da página Vendedores: medidas de faixa de receita, % postado no prazo, % atrasado, nota por vendedor e piso de 30 pedidos. Da página Logística: Frete % do Valor e a coluna calculada `Regiao` em `vw_dim_cliente`; `Atraso Medio` é a média de `dias_atraso` dos pedidos com `entregue_no_prazo` = 0. Da página Satisfação: `% Nota Baixa` e `Pedidos Sem Avaliacao`, mais as colunas calculadas `Faixa Atraso` e `Faixa Atraso Ordem` em `vw_fato_pedidos`. Da página Pagamentos e pedidos: `Pedidos no Periodo`, `Pedidos Perdidos`, `% Pedidos Perdidos`, `% Perdidos 100+`, `% Perdidos Geral`, `Pagamentos Cartao`, `Pagamentos Cartao Total`, `Pagamentos Parcelados`, `% Parcelado`, `Media Parcelas Cartao`, `% Pagamentos por Parcela`, `% Pedidos por Forma` e `% Valor por Forma`, mais a coluna calculada `Forma Pagamento PT` em `vw_fato_pagamentos`. A comparação de crescimento usa sempre jan-ago nos dois
 anos, porque só 2017 tem 12 meses e 2018 termina em agosto.
 
 **Conferências já feitas contra o SQL:**
@@ -198,19 +203,21 @@ anos, porque só 2017 tem 12 meses e 2018 termina em agosto.
 - Clientes: 94.707 pessoas, 2.054 recompradores (2,17%), faixas de dias de compra e recompra nos 5 maiores estados, contra `03_clientes.sql`;
 - Vendedores: 3.029 vendedores com venda, faixas de receita (13,2% no top 10), 633 vendedores com 30+ pedidos (100 bons, 460 regulares, 73 problema) e 91,1% postados no prazo, contra `04_vendedores.sql`;
 - Logística: 91,87% no prazo, 12,5 dias, 7.822 atrasados com média de 8,86 dias, frete de 16,6% do valor, os 20 meses, os 27 estados e as 5 regiões, contra `05_logistica.sql`.
+- Satisfação: nota média 4,12, 13,84% de notas 1 ou 2, 727 sem avaliação em 97.905, pedidos por nota (soma 97.178), nota por faixa de atraso (4,29 / 3,59 / 2,10 / 1,67 / 1,72) e os 20 meses, contra `06_satisfacao.sql`.
+- Pagamentos e pedidos: 1,19% de perdidos (1.182 de 99.092), média de 3,50 parcelas, 66,8% parcelados, participação por forma (77,0 / 19,9 / 3,8 / 1,5% dos pedidos e 78,5 / 18,0 / 2,2 / 1,4% do valor), parcelas, os 20 meses e os 24 estados com 100+ pedidos, contra `07_pagamentos_pedidos.sql`.
 
 **Páginas do painel (8 previstas no desenho):**
 
 | Página | Perguntas | Situação |
 |---|---|---|
-| Visão executiva | resumo | Pronta (ajustes de formato e do texto de pedidos sem avaliação pendentes) |
+| Visão executiva | resumo | Pronta (texto de pedidos sem avaliação corrigido no PR #20; ajustes de formato pendentes) |
 | Vendas | 1 a 5 | Pronta (conferências do ticket mensal, da Black Friday e da matriz ainda abertas) |
 | Produtos | 6 | Pronta, conferida contra o SQL |
 | Clientes | 7 e 8 | Pronta, conferida contra o SQL (PR feito em 26/10) |
 | Vendedores | 9 e 10 | Pronta, conferida contra o SQL (27/10) |
 | Logística | 11 e 12 | Pronta, conferida contra o SQL (28/10) |
-| Satisfação | 13 | A fazer |
-| Pagamentos e pedidos | 14 e 15 | A fazer |
+| Satisfação | 13 | Pronta, conferida contra o SQL (29/10) |
+| Pagamentos e pedidos | 14 e 15 | Montada em 30/10 e conferida contra o SQL; acabamento e PR em 04/11 |
 
 A pergunta 16 (lucro) não tem página: a resposta é "o dado não permite" e vai no relatório.
 
@@ -262,24 +269,54 @@ A pergunta 16 (lucro) não tem página: a resposta é "o dado não permite" e va
 - Conferido: 32.951 produtos (610 sem categoria), top 10 de receita igual ao anterior (R$ 8,39 Mi, 62,4%) e 52 categorias com 100+ avaliações.
 - Decisão: sem fusão de categorias (`eletrodomesticos_2` e `casa_conforto_2` ficam separadas), para os totais não mudarem (`docs/premissas.md`, Bloco 6).
 
+**Página Satisfação (concluída em 29/10).**
+- 3 cartões (nota média, % de avaliações com nota 1 ou 2 e pedidos sem avaliação), colunas de nota média por faixa de atraso, colunas de pedidos por nota, linha de nota média por mês de compra e caixa "Como ler esta página".
+- Definições: nota = 1 review por pedido (o mais recente); base = pedidos válidos com item (97.905); faixas de atraso só entre pedidos entregues, com cortes de 3, 7 e 14 dias, escolha da análise (`docs/premissas.md`, Bloco 7).
+- Colunas calculadas novas em `vw_fato_pedidos`: `Faixa Atraso` e `Faixa Atraso Ordem`. Medidas novas: `% Nota Baixa` e `Pedidos Sem Avaliacao`, ambas sobre `Pedidos` (base de itens). `Pedidos Avaliados` (Produtos) não foi usada: dá 97.181, porque inclui 3 pedidos avaliados que não têm item.
+- Problema: a `Faixa Atraso Ordem` lia a `Faixa Atraso`, e a `Faixa Atraso` era classificada por ela; o Power BI acusou dependência circular. Solução: a ordem lê as colunas de origem (`entregue_no_prazo` e `dias_atraso`).
+- Problema: o gráfico de pedidos por nota somou 3.266 (esperado 97.178) e a linha mensal ficou abaixo da consulta 6.6, enquanto os cartões e o gráfico de faixa de atraso batiam. A medida estava certa; a causa estava no contexto de filtro dos dois visuais (provavelmente filtros herdados na cópia de um visual de outra página; causa não confirmada). Corrigido nos visuais.
+- Problema: uma barra "(Em branco)" no gráfico de faixa de atraso, dos pedidos válidos ainda sem entrega (cerca de 1.700). Solução: filtro no visual (faixa não vazia).
+- Conferido contra `06_satisfacao.sql` (6.1 a 6.6): 4,12; 13,84% de notas 1 ou 2; 727 sem avaliação em 97.905; pedidos por nota (soma 97.178); nota por faixa de atraso (4,29 / 3,59 / 2,10 / 1,67 / 1,72); 20 meses (soma 97.178 avaliados). As consultas fecham entre si (6.1 e 6.5: 7.658 avaliados com atraso e 96.203 entregues).
+- Fatos: nota média de 4,29 no prazo contra 2,57 com atraso; a queda mais forte está entre "Até 3 dias" (3,59) e "De 4 a 7 dias" (2,10), e de 8 dias em diante a nota fica perto de 1,7. 13,84% das avaliações têm nota 1 ou 2. As menores notas mensais são mar/18 (3,76), fev/18 (3,86) e nov/17 (3,95); mar/18 também teve a menor pontualidade.
+- Limites: a nota representa só quem avaliou (727 pedidos sem avaliação); a faixa "Até 3 dias" inclui 1.291 pedidos entregues no dia prometido, depois da meia-noite; pedidos ainda não entregues ficam fora do gráfico de faixas.
+- A causa da nota baixa (atraso, produto, atendimento) é hipótese, não é provada pelos dados.
+
+**Página Pagamentos e pedidos (montada em 30/10; acabamento e PR em 04/11).**
+- 3 cartões (pedidos perdidos, média de parcelas no cartão e pagamentos no cartão em 2 ou mais parcelas), participação por forma de pagamento (por pedidos e por valor), parcelas do cartão, % de perdidos por mês, % de perdidos por estado do cliente (com linha da taxa geral) e caixa "Como ler esta página".
+- Definições: perdidos = cancelados + indisponíveis, sobre todos os pedidos do período (99.092); formas de pagamento de pedidos válidos com valor acima de zero; média de parcelas por pagamento, só cartão, sem os de 0 parcelas; estados com 100 ou mais pedidos (`docs/premissas.md`, Bloco 8).
+- Colunas e medidas novas: `Forma Pagamento PT` (coluna calculada em `vw_fato_pagamentos`) e as 13 medidas listadas acima. A taxa de perdidos sai de `COUNTROWS` na `vw_fato_pedidos` (que mantém os cancelados), não de `Pedidos`, que é por item.
+- Problema: as barras de participação por forma saíram todas com 100%. As medidas removiam o filtro da coluna original `forma_pagamento`, mas o eixo do gráfico usava a coluna traduzida. Solução: remover o filtro da coluna que está no eixo (`Forma Pagamento PT`).
+- Problema: `% Perdidos 100+` e `% Perdidos Geral` deram erro porque a `% Pedidos Perdidos`, da qual dependem, ainda não existia no modelo. Solução: criar as medidas na ordem de dependência.
+- Problema: o cartão de 2 ou mais parcelas mostrou 0,67 em vez de 66,8%. O formato de porcentagem precisa estar na medida, não no visual.
+- Regra aplicada: `KEEPFILTERS` em `Pagamentos Cartao`. Sem ele, o filtro `parcelas > 0` do `CALCULATE` apagaria o filtro do eixo de parcelas e todas as colunas mostrariam o total.
+- Conferido contra `07_pagamentos_pedidos.sql` (7.1 a 7.6): 1,19%; 3,50; 66,8%; participação por forma; parcelas (33,2 / 16,2 / 13,6 / 9,2 / 6,9 / 6,8 / 5,6 / 5,1 / 2,1 / 0,8 ...); 20 meses (0,29% a 3,48%); 24 estados (RO 2,77% a MT 0,44%) com a linha da taxa geral em 1,19%.
+- Fatos: cartão de crédito é 77,0% dos pedidos e 78,5% do valor; 66,8% dos pagamentos no cartão são parcelados, com picos em 8 e 10 parcelas; 1.182 pedidos perdidos (580 cancelados e 602 indisponíveis); a maior taxa mensal é a de fev/17 (3,48%, base de 1.780 pedidos), e o 1,40% de ago/18 vem dos cancelados; RO tem a maior taxa por estado, com só 7 pedidos perdidos.
+- Limites: a participação por pedidos soma 102,2%; o dataset não traz o motivo do cancelamento; 3 estados com menos de 100 pedidos ficam fora do gráfico (a confirmar com consulta).
+- A causa do cancelamento, da indisponibilidade e dos picos de parcelamento é hipótese, não é provada pelos dados.
+- Vendas, no mesmo PR: o gráfico de ticket médio por mês ganhou uma linha de referência com o ticket do período (R$ 137,37, igual ao cartão).
+
 **Pendente:**
-- montar as páginas Satisfação e Pagamentos e pedidos;
-- conferências abertas: nota média contra as consultas da área de satisfação; ticket médio por mês, receita de 24/11/2017 (Black Friday) e células da matriz de dia x horário da página Vendas;
-- corrigir o texto de pedidos sem avaliação na caixa da página Visão executiva (727 de 97.905, 0,74%); `docs/premissas.md` já traz o número.
+- fechar o PR da página Pagamentos e pedidos (aberto em 04/11) e commitar estes documentos;
+- acabamento da página Pagamentos e pedidos, na captura de 04/11: subtítulo "Nota de 1 a 5" herdado no gráfico de estados, eixo das parcelas ordenado por valor (deveria ir de 1 a 24) e rótulos dos botões de navegação ("Logística" e "Pagamentos") nas páginas;
+- formato dos contadores da Vendas, que mostram ",00" (ex.: 97.905,00);
+- conferências abertas da Vendas: ticket médio por mês, receita de 24/11/2017 (Black Friday) e células da matriz de dia x horário; confirmar se a linha de média do ticket usa a medida ou um valor fixo;
+- limpeza do modelo: excluir a medida vazia `Medida` e trocar o formato de `Pedidos Avaliados` para `#,0`;
+- confirmar com consulta que os pedidos do período vêm de 27 estados;
+- dicionário de dados (etapa 11), relatório de 1 página e README (etapa 12), ensaio com o diretor.
 
-**Cronograma revisado (26/10).** O prazo passou de 28/10/2026 para 06/11/2026, para fechar as 8 páginas com o mesmo cuidado de conferência.
+**Cronograma revisado (26/10).** O prazo passou de 28/10/2026 para 06/11/2026, para fechar as 8 páginas com o mesmo cuidado de conferência. Situação em 04/11:
 
-| Data | Entrega |
-|---|---|
-| 27/10 | Página Vendedores (perguntas 9 e 10) |
-| 28/10 | Página Logística (11 e 12) |
-| 29/10 | Página Satisfação (13) |
-| 30/10 | Página Pagamentos e pedidos (14 e 15) |
-| 31/10 | Reserva: conferências abertas e textos dos documentos |
-| 02/11 | Dicionário de dados (etapa 11) |
-| 03 a 04/11 | Relatório executivo de 1 página e README |
-| 05/11 | Ensaio com o diretor |
-| 06/11 | Entrega final |
+| Data | Entrega | Situação |
+|---|---|---|
+| 27/10 | Página Vendedores (perguntas 9 e 10) | Feita |
+| 28/10 | Página Logística (11 e 12) | Feita |
+| 29/10 | Página Satisfação (13) | Feita |
+| 30/10 | Página Pagamentos e pedidos (14 e 15) | Montada em 30/10; acabamento e PR em 04/11 |
+| 31/10 | Reserva: conferências abertas e textos dos documentos | Textos dos documentos atualizados em 04/11; conferências da Vendas abertas |
+| 02/11 | Dicionário de dados (etapa 11) | A fazer (atrasado) |
+| 03 a 04/11 | Relatório executivo de 1 página e README | A fazer (atrasado) |
+| 05/11 | Ensaio com o diretor | A fazer |
+| 06/11 | Entrega final | A fazer |
 
 ---
 
