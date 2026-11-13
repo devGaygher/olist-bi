@@ -1,112 +1,48 @@
-# Olist BI - E-commerce Analytics
+# Olist BI
 
-Projeto de portfólio em **SQL (MySQL), Power BI e Git/GitHub**, construído como uma
-**simulação**: eu faço o papel de analista de dados da área de BI de um marketplace
-brasileiro, que recebe um pedido da diretoria.
+Projeto de portfólio de análise de dados com SQL (MySQL), Power BI e Git. É uma simulação: eu faço o papel de analista de BI de um marketplace brasileiro e respondo a um pedido do diretor geral, que precisa explicar ao conselho como foi a operação em 2017 e 2018.
 
-> **Aviso:** a empresa, o diretor e o cenário são **fictícios**. Os dados são os do
-> dataset público *Brazilian E-Commerce Public Dataset by Olist*
-> ([Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)), com pedidos
-> de 2016 a 2018. Este projeto não representa experiência de trabalho em nenhuma
-> empresa. Consulte a licença do dataset na página do Kaggle.
+> A empresa, o diretor e o cenário são fictícios. Os dados são do dataset público *Brazilian E-Commerce Public Dataset by Olist*, no [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). O projeto não representa experiência de trabalho em nenhuma empresa. A licença do dataset está na página do Kaggle.
 
-## O cenário
+## O que foi entregue
 
-O Diretor Geral precisa explicar ao conselho como foi a operação nos últimos dois anos e
-pediu:
+O diretor pediu quatro coisas, e todas estão neste repositório:
 
-1. um **painel no Power BI** (uma página de resumo e uma por área);
-2. um **relatório executivo de 1 página**, em linguagem de negócio;
-3. **documentação** (dicionário de dados e premissas);
-4. **código versionado**, para o time de TI reproduzir o trabalho.
+- um painel no Power BI com 8 páginas: Visão executiva, Vendas, Produtos, Clientes, Vendedores, Logística, Satisfação e Pagamentos e pedidos;
+- um relatório executivo de 1 página, em `docs/relatorio-executivo.pdf`;
+- documentação em `docs/`: briefing, premissas, dicionário de dados e o registro das etapas;
+- o código SQL e o projeto do Power BI, versionados.
 
-Ele também pediu que, quando o dado não permitir responder, isso seja dito com clareza,
-em vez de entregar um número chutado. O briefing completo está em
-[`docs/briefing-diretoria.md`](docs/briefing-diretoria.md).
+O painel responde às 16 perguntas do briefing. A última, sobre lucro, não tem resposta: o dataset não traz custos, e o relatório diz isso em vez de estimar um número.
 
-## As 16 perguntas
+<!-- ![Visão executiva do painel](docs/img/visao-executiva.png) -->
 
-| Área | Perguntas |
-|---|---|
-| Vendas | Vendas e pedidos por mês; crescimento contra o ano anterior; ticket médio; sazonalidade; Black Friday |
-| Produtos | O que mais vende; melhores e piores categorias em avaliação |
-| Clientes | Origem dos clientes; recompra |
-| Vendedores | Dependência de poucos vendedores; quem entrega bem e quem dá problema |
-| Logística | Entrega no prazo e tempo de entrega; regiões lentas e peso do frete |
-| Satisfação | Nota média e efeito do atraso na nota |
-| Pagamentos e pedidos | Formas de pagamento e parcelas; pedidos cancelados |
-| Lucro | **Não dá para responder:** o dataset não tem custos (isso fica explícito no relatório) |
+## O que os dados mostram
 
-## Regras de negócio (premissas)
+Entre jan/2017 e ago/2018 foram R$ 13,45 milhões em vendas (sem frete) e 97.905 pedidos.
 
-As definições foram combinadas antes de qualquer cálculo e estão em
-[`docs/premissas.md`](docs/premissas.md). As principais:
+- O crescimento sobre o mesmo mês do ano anterior caiu de +687% em jan/2018 para +49% em ago/2018. A base de 2017 era pequena.
+- A nota média é 4,29 quando o pedido chega no prazo e 2,57 quando atrasa. É uma associação, e os dados não provam a causa.
+- Só 2,17% dos clientes voltaram a comprar. Como a janela é de 20 meses, esse número é um piso.
 
-- **Receita:** soma de `price` dos itens (sem frete) de pedidos válidos.
-- **Pedido válido:** status diferente de `canceled` e `unavailable`.
-- **Período:** janeiro/2017 a agosto/2018, os únicos 20 meses completos.
-- **Cliente:** pessoa identificada por `customer_unique_id` (o `customer_id` muda a
-  cada pedido).
-- **Satisfação:** 1 avaliação por pedido, a mais recente.
+## Como o trabalho foi feito
 
-## Limites dos dados
+Os CSVs entram numa camada bruta no MySQL, e as chaves foram criadas depois do profiling, porque o dataset tem duplicatas. As regras de negócio (pedido válido, período, receita sem frete, uma avaliação por pedido) foram escritas em `docs/premissas.md` antes de qualquer cálculo. As análises em SQL viram views, e o Power BI usa um modelo estrela em cima delas, com as medidas em DAX.
 
-- Não há custos nem despesas: **lucro não pode ser calculado**, só receita.
-- Clientes, vendedores e produtos aparecem apenas como códigos.
-- 768 pedidos não têm avaliação; a nota média representa só quem avaliou.
-- Fora de jan/2017 a ago/2018 os dados são incompletos.
+Os números do painel foram conferidos contra as consultas SQL, e o registro está em `docs/etapas-do-projeto.md`. O trabalho seguiu o fluxo de uma branch por assunto, com Pull Request e commits no padrão `tipo(escopo): resumo`.
 
-## Como o trabalho foi organizado
-
-O fluxo de dados vai da camada bruta (CSVs carregados como estão) até views prontas para
-o Power BI. Cada achado do profiling virou uma regra escrita, e as chaves do banco foram
-criadas e testadas antes de qualquer análise.
-
-| # | Etapa | Situação |
-|---|---|---|
-| 1 | Alinhamento: cenário, briefing e definições | Concluída |
-| 2 | Ambiente, Git e GitHub | Concluída |
-| 3 | Schema (`sql/01_schema.sql`) | Concluída |
-| 4 | Carga e validação (`sql/02_carga.sql`) | Concluída |
-| 5 | Profiling (`sql/03_profiling.sql`) | Concluída |
-| 6 | Premissas (`docs/premissas.md`) | Concluída |
-| 7 | Chaves primárias e estrangeiras, com testes (`sql/02b_chaves.sql`, `sql/02c_testes.sql`) | Concluída |
-| 8 | Análises em SQL das 16 perguntas (`sql/04_analises/`) | Em andamento |
-| 9 | Views para o BI (`sql/05_views_bi.sql`) | A fazer |
-| 10 | Modelo estrela e painel no Power BI | A fazer |
-| 11 | Dicionário de dados | A fazer |
-| 12 | Relatório executivo e apresentação | A fazer |
-
-Resumo do que foi validado até aqui:
-
-- 9 CSVs carregados (cerca de 1,4 milhão de linhas), com cada tabela conferida contra o
-  arquivo de origem.
-- 8 chaves primárias e 6 chaves estrangeiras, com testes que provam que o banco barra
-  linhas órfãs e duplicadas.
-- 0 órfãos entre as tabelas principais.
-
-## Estrutura do repositório
+## Estrutura
 
 ```
-olist-bi/
-|-- data/raw/          CSVs do Kaggle (não versionados)
-|-- docs/              briefing, premissas, etapas e estudo de Git
-|-- sql/
-|   |-- 01_schema.sql      cria as 9 tabelas da camada bruta
-|   |-- 02_carga.sql       carrega os CSVs
-|   |-- 02b_chaves.sql     chaves primárias e estrangeiras
-|   |-- 02c_testes.sql     testes das chaves
-|   |-- 03_profiling.sql   profiling em 5 blocos
-|   `-- 04_analises/       análises por área (em andamento)
-`-- README.md
+data/raw/    CSVs do Kaggle (não versionados)
+docs/        briefing, premissas, dicionário de dados, etapas e relatório
+sql/         schema, carga, chaves, profiling, análises e views
+powerbi/     projeto do Power BI (PBIP) e tema
 ```
-
-As pastas `powerbi/` e `relatorio/` serão criadas nas etapas 10 e 12.
 
 ## Como reproduzir
 
-Requisitos: MySQL 8.0 e o cliente de linha de comando `mysql`. O projeto foi desenvolvido
-no Windows com PowerShell.
+Requisitos: MySQL 8.0, o cliente `mysql` e o Power BI Desktop. O projeto foi feito no Windows, com PowerShell.
 
 1. Baixe os 9 CSVs do dataset no Kaggle e coloque em `data/raw/`.
 2. Crie o banco e habilite a carga local de arquivos:
@@ -116,8 +52,7 @@ no Windows com PowerShell.
    SET GLOBAL local_infile = 1;
    ```
 
-3. Rode os scripts **da raiz do projeto**, nesta ordem. A carga precisa do parâmetro
-   `--local-infile=1`:
+3. Rode os scripts da raiz do projeto, nesta ordem:
 
    ```
    mysql -u root -p -e "source sql/01_schema.sql"
@@ -125,21 +60,22 @@ no Windows com PowerShell.
    mysql -u root -p -D olist -e "source sql/02b_chaves.sql"
    mysql -u root -p -D olist -e "source sql/02c_testes.sql"
    mysql -u root -p -D olist -t -e "source sql/03_profiling.sql"
+   mysql -u root -p -D olist --default-character-set=utf8mb4 -e "source sql/05_views/05a_categorias_ptbr.sql"
+   mysql -u root -p -D olist -e "source sql/05_views/05_views_bi.sql"
    ```
 
-   O `02_carga.sql` termina com a contagem de linhas de cada tabela, para conferência.
-   O `02b_chaves.sql` não pode ser rodado duas vezes: para repetir, recrie o banco a
-   partir do `01_schema.sql`.
+   O `02b_chaves.sql` não pode ser rodado duas vezes. Para repetir, recrie o banco a partir do `01_schema.sql`.
 
-## Decisões de método
+4. Abra `powerbi/olist-bi.pbip` no Power BI Desktop e aponte a conexão para o seu MySQL.
 
-- **SQL para preparar e validar, Power BI para o modelo e as medidas.** As regras de
-  negócio ficam em views reutilizáveis; o DAX cuida das medidas que mudam com o filtro.
-- **Camada bruta primeiro, chaves depois do profiling:** o dataset tem duplicatas (por
-  exemplo, `review_id` repetido), e impor chaves antes de conhecer os dados esconderia o
-  problema.
-- **Validar contra a fonte:** as contagens do banco foram conferidas com os próprios
-  CSVs, e a carga corrigiu três problemas que não geravam nenhum erro (caractere de
-  escape, texto cortado por `varchar` curto e fim de linha do Windows).
-- **Git:** uma branch por assunto, Pull Request e commits no padrão
-  `tipo(escopo): resumo`.
+## Limites dos dados
+
+- Não há custos nem despesas, então o lucro não pode ser calculado.
+- A nota média representa só quem avaliou: 727 dos 97.905 pedidos (0,74%) não têm avaliação.
+- Clientes, vendedores e produtos aparecem apenas como códigos.
+- Só jan/2017 a ago/2018 tem dados completos.
+
+## Autor
+
+Rafael Gaygher
+<!-- adicione aqui o link do seu LinkedIn -->
