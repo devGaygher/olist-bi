@@ -4,6 +4,8 @@ Projeto de portfólio de análise de dados com SQL (MySQL), Power BI e Git. É u
 
 > A empresa, o diretor e o cenário são fictícios. Os dados são do dataset público *Brazilian E-Commerce Public Dataset by Olist*, no [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). O projeto não representa experiência de trabalho em nenhuma empresa. A licença do dataset está na página do Kaggle.
 
+![Painel Olist BI: navegação pelas 8 páginas](docs/imgs/painel-olist-bi.gif)
+
 ## O que foi entregue
 
 O diretor pediu quatro coisas, e todas estão neste repositório:
@@ -15,7 +17,17 @@ O diretor pediu quatro coisas, e todas estão neste repositório:
 
 O painel responde às 16 perguntas do briefing. A última, sobre lucro, não tem resposta: o dataset não traz custos, e o relatório diz isso em vez de estimar um número.
 
-<!-- ![Visão executiva do painel](docs/img/visao-executiva.png) -->
+## Páginas do painel
+
+| Visão executiva | Vendas |
+|---|---|
+| ![Visão executiva](docs/imgs/01-visao-executiva.png) | ![Vendas](docs/imgs/02-vendas.png) |
+| **Produtos** | **Clientes** |
+| ![Produtos](docs/imgs/03-produtos.png) | ![Clientes](docs/imgs/04-clientes.png) |
+| **Vendedores** | **Logística** |
+| ![Vendedores](docs/imgs/05-vendedores.png) | ![Logística](docs/imgs/06-logistica.png) |
+| **Satisfação** | **Pagamentos e pedidos** |
+| ![Satisfação](docs/imgs/07-satisfacao.png) | ![Pagamentos e pedidos](docs/imgs/08-pagamentos.png) |
 
 ## O que os dados mostram
 
@@ -77,5 +89,4 @@ Requisitos: MySQL 8.0, o cliente `mysql` e o Power BI Desktop. O projeto foi fei
 
 ## Autor
 
-Rafael Gaygher
-<!-- adicione aqui o link do seu LinkedIn -->
+Rafael Gaygher · [LinkedIn](https://www.linkedin.com/in/rafael-gaygher/) · [GitHub](https://github.com/devGaygher)
