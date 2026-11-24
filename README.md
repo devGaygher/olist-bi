@@ -1,6 +1,6 @@
 # Olist BI
 
-Projeto de portfólio de análise de dados com SQL (MySQL), Power BI e Git. É uma simulação: eu faço o papel de analista de BI de um marketplace brasileiro e respondo a um pedido do diretor geral, que precisa explicar ao conselho como foi a operação em 2017 e 2018.
+Projeto de portfólio de análise de dados com SQL (MySQL), Power BI e Git. É uma simulação: eu faço o papel de analista de BI de um marketplace brasileiro e respondo a um pedido do diretor geral, que precisa explicar ao conselho como foi a operação em 2017 e 2018. Desenvolvi esse projeto com o objetivo de estudar as stacks necessárias para um analista de dados e durante o percurso tive apoio de IA.
 
 > A empresa, o diretor e o cenário são fictícios. Os dados são do dataset público *Brazilian E-Commerce Public Dataset by Olist*, no [Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce). O projeto não representa experiência de trabalho em nenhuma empresa. A licença do dataset está na página do Kaggle.
 
